@@ -24,6 +24,7 @@
                     ><img src="./assets/img/baidu.png" alt="百度" />百度</span
                 >
                 <div class="c-baidu">
+                    <p class="u-tip">使用百度进行站内搜索时，请勿删除前面的<em>site:jx3box.com</em></p>
                     <iframe
                         :src="'https://m.baidu.com/s?word=site%3Ajx3box.com+' + s"
                         frameborder="0"
@@ -216,6 +217,18 @@ body {
 
 //百度搜索
 .c-baidu {
+    .u-tip{
+        margin:5px 10px;
+        background-color: @bg;
+        padding:5px;
+        border:1px solid @border;
+        border-radius:4px;
+        font-size:14px;
+        color:#555;
+        em{
+            color:@blue;
+        }
+    }
     iframe {
         width: 100%;
         height: 2400px;
