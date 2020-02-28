@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="c-logo">
-            <img src="https://oss.jx3box.com/image/search/logo.png" alt="JX3BOX" />
+            <img src="./assets/img/logo.png" alt="JX3BOX" />
             <a href="https://www.jx3box.com">JX3BOX</a>
             <hr />
             <p>搜索中心</p>
@@ -19,15 +19,6 @@
             </div>
         </div> -->
         <el-tabs v-model="activeTab" @tab-click="tabChange">
-            <el-tab-pane name="google">
-                <span slot="label"
-                    ><img
-                        src="./assets/img/google.png"
-                        alt="Google"
-                    />Google</span
-                >
-                <div class="gcse-search"></div>
-            </el-tab-pane>
             <el-tab-pane name="baidu">
                 <span slot="label"
                     ><img src="./assets/img/baidu.png" alt="百度" />百度</span
@@ -39,6 +30,15 @@
                     ></iframe>
                 </div>
             </el-tab-pane>
+            <el-tab-pane name="google">
+                <span slot="label"
+                    ><img
+                        src="./assets/img/google.png"
+                        alt="Google"
+                    />Google</span
+                >
+                <div class="gcse-search"></div>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -49,7 +49,7 @@ export default {
     data: function() {
         return {
             q : "",
-            activeTab: "google"
+            activeTab: "baidu"
         };
     },
     computed: {
@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         tabChange(tab, event) {
-            console.log(tab, event);
+            //console.log(tab, event);
         }
     },
     mounted: function() {
