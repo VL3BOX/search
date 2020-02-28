@@ -34,7 +34,7 @@
                 >
                 <div class="c-baidu">
                     <iframe
-                        :src="'http://m.baidu.com/s?wd=site:jx3box.com%20' + s"
+                        :src="'https://m.baidu.com/s?word=site%3Ajx3box.com+' + s"
                         frameborder="0"
                     ></iframe>
                 </div>
@@ -64,9 +64,7 @@ export default {
     },
     mounted: function() {
         let _q = location.search.slice(3);
-        if (_q) {
-            this.q = decodeURIComponent(_q);
-        }
+        this.q = _q ? decodeURIComponent(_q) : '剑网3'
     }
 };
 </script>

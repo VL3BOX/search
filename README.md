@@ -1,19 +1,11 @@
-# search
+# 新版搜索
+https://search.jx3box.com
 
-## Project setup
-```
-npm install
-```
+## TODO
++ 增加词库结果展示
++ 统计搜索词
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 项目部署依赖说明
++ 托管：Github Pages
++ 环境：nodejs v12+
++ 部署：github actions => gh-pages分支
