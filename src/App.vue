@@ -25,7 +25,7 @@
                 >
                 <div class="c-baidu">
                     <p class="u-tip">使用百度进行站内搜索时，请勿删除前面的<em>site:jx3box.com</em></p>
-                    <iframe
+                    <iframe id="iframe_baidu" 
                         :src="'https://www.baidu.com/s?word=site%3Ajx3box.com+' + s"
                         frameborder="0"
                     ></iframe>
@@ -231,7 +231,7 @@ body {
     }
     iframe {
         width: 100%;
-        height: 2400px;
+        height: 1500px;
     }
 }
 </style>
