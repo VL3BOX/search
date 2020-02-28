@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="c-logo">
-            <img src="./assets/img/logo.png" alt="JX3BOX" />
+            <img src="https://oss.jx3box.com/image/search/logo.png" alt="JX3BOX" />
             <a href="https://www.jx3box.com">JX3BOX</a>
             <hr />
             <p>搜索中心</p>
