@@ -23,9 +23,9 @@
                 <span slot="label"
                     ><img src="./assets/img/baidu.png" alt="百度" />百度</span
                 >
-                <div class="c-baidu">
+                <div class="c-baidu" @click="bd_click($event)">
                     <p class="u-tip">使用百度进行站内搜索时，请勿删除前面的<em>site:jx3box.com</em></p>
-                    <iframe id="iframe_baidu" 
+                    <iframe ref="iframe_baidu" id="iframe_baidu"
                         :src="'https://www.baidu.com/s?word=site%3Ajx3box.com+' + s"
                         frameborder="0"
                     ></iframe>
@@ -50,7 +50,7 @@ export default {
     data: function() {
         return {
             q : "",
-            activeTab: "baidu"
+            activeTab: "baidu",
         };
     },
     computed: {
@@ -61,7 +61,7 @@ export default {
     methods: {
         tabChange(tab, event) {
             //console.log(tab, event);
-        }
+        },
     },
     mounted: function() {
         let _q = location.search.slice(3);
@@ -72,9 +72,11 @@ export default {
 
 <style lang="less">
 @import "./assets/css/var.less";
+html{
+    background-color: @bg;
+}
 body {
     padding: 100px 10px 20px 10px;
-    background-color: @bg;
     max-width: 62%;
     margin: 0 auto;
     a {
@@ -125,6 +127,14 @@ body {
         display: inline-block;
         padding-left: 20px;
         color: #777;
+    }
+}
+@media screen and (max-width:767px){
+    body{
+        padding-top:40px;
+    }
+    .c-logo{
+        margin-bottom:-40px;
     }
 }
 
@@ -234,4 +244,13 @@ body {
         height: 1500px;
     }
 }
+@media screen and (max-width:767px){
+    .c-baidu .u-tip{
+        display:none;
+    }
+    .c-baidu iframe{
+        //margin-top:-60px;
+    }
+}
+
 </style>
