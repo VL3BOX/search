@@ -82,7 +82,8 @@
 const axios = require('axios');
 const baidu_path = 'https://www.baidu.com/s?word=site%3Ajx3box.com+'
 const google_path = './google_proxy.html?q='
-const {JX3BOX} = require('@jx3box/jx3box-config');
+const {JX3BOX} = require('@iruxu/test');
+// const {JX3BOX} = require('@jx3box/jx3box-config');
 export default {
     name: "App",
     data: function() {
