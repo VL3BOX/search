@@ -10,9 +10,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Authenticate with GitHub package registry
-      run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ACCESS_TOKEN }}" > ~/.npmrc
-
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@master
       env:
