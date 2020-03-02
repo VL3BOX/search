@@ -6,27 +6,59 @@
             <hr />
             <p>搜索中心</p>
         </div>
-        <!-- TODO: 词条接口 -->
-        <!-- <div class="c-wiki">
-            <a class="u-mark" href="https://www.jx3box.com" target="_blank"
-                >剑网3.com</a
+        <div class="c-search">
+            <el-input
+                placeholder="请输入内容"
+                v-model="q"
+                class="input-with-select"
+                @change="search"
+                clearable 
             >
-            <a class="u-title" href="https://www.jx3box.com" target="_blank"
-                >剑网3.com/词条</a
-            >
-            <div class="u-desc">
-                Description for wiki
-            </div>
-        </div> -->
-        <el-tabs v-model="activeTab" @tab-click="tabChange">
+                <template slot="prepend">JX3BOX</template>
+                <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
+                    <el-option label="百度" value="百度"
+                        ><img
+                            src="./assets/img/baidu.png"
+                            alt="百度"
+                        />百度</el-option
+                    >
+                    <el-option label="Google" value="Google"
+                        ><img
+                            src="./assets/img/google.png"
+                            alt="Google"
+                        />Google</el-option
+                    >
+                </el-select> -->
+                <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+        </div>
+        <ul class="c-wiki" v-if="wiki.length">
+            <li v-for="(item,i) in wiki" :key="'wiki-' + i">
+                <a class="u-mark" href="https://剑网3.com" target="_blank"
+                    >剑网3.com</a
+                >
+                <a class="u-title" :href="'https://剑网3.com/' + item.key" target="_blank"
+                    >剑网3.com/{{item.key}}</a
+                >
+                <div class="u-desc">
+                    {{item.desc}}
+                </div>
+            </li>
+        </ul>
+        <el-tabs v-model="activeTab">
             <el-tab-pane name="baidu">
                 <span slot="label"
                     ><img src="./assets/img/baidu.png" alt="百度" />百度</span
                 >
-                <div class="c-baidu" @click="bd_click($event)">
-                    <p class="u-tip">使用百度进行站内搜索时，请勿删除前面的<em>site:jx3box.com</em></p>
-                    <iframe ref="iframe_baidu" id="iframe_baidu"
-                        :src="'https://www.baidu.com/s?word=site%3Ajx3box.com+' + s"
+                <div class="c-baidu">
+                    <p class="u-tip">
+                        使用百度进行站内搜索时，请勿删除前面的<em
+                            >site:jx3box.com</em
+                        >
+                    </p>
+                    <iframe
+                        ref="iframe_baidu"
+                        :src="url_baidu"
                         frameborder="0"
                     ></iframe>
                 </div>
@@ -38,41 +70,73 @@
                         alt="Google"
                     />Google</span
                 >
-                <div class="gcse-search"></div>
+                <div class="c-google">
+                    <iframe ref="iframe_google" :src="url_google" frameborder="0"></iframe>
+                </div>
             </el-tab-pane>
         </el-tabs>
     </div>
 </template>
 
 <script>
+const axios = require('axios');
+const baidu_path = 'https://www.baidu.com/s?word=site%3Ajx3box.com+'
+const google_path = './google_proxy.html?q='
+const {JX3BOX} = require('@jx3box/jx3box-config');
 export default {
     name: "App",
     data: function() {
         return {
-            q : "",
+            q: "",
+            //select: "百度",
             activeTab: "baidu",
-        };
+            wiki : [],
+            url_baidu: '',
+            url_google: '',
+            };
     },
     computed: {
         s: function() {
             return encodeURIComponent(this.q);
-        }
+        },
     },
     methods: {
-        tabChange(tab, event) {
-            //console.log(tab, event);
+        init(){
+            //get query words, update base data
+            let _q = location.search.slice(3);
+            this.q = _q ? decodeURIComponent(_q) : "剑网3";
+        },
+        search() {
+            //load iframe
+            this.build()
+
+            //record for statistics
+            axios.post(JX3BOX.__spider + 'jx3search?q=' + this.q).then((res) => {
+                console.log('i o u')
+            })
+        },
+        build(){
+            this.url_baidu = baidu_path + this.s
+            this.url_google = google_path + this.s
         },
     },
     mounted: function() {
-        let _q = location.search.slice(3);
-        this.q = _q ? decodeURIComponent(_q) : '剑网3'
+        this.init()
+        this.build()
+
+        //TODO:init wiki results
+        // {
+        //     key : '关键词',
+        //     desc : '描述',
+        //     url : 'link'
+        // }
     }
 };
 </script>
 
 <style lang="less">
 @import "./assets/css/var.less";
-html{
+html {
     background-color: @bg;
 }
 body {
@@ -83,9 +147,9 @@ body {
         text-decoration: none;
     }
 }
-@media screen and (max-width:1024px){
-    body{
-        max-width:90%;
+@media screen and (max-width: 1024px) {
+    body {
+        max-width: 90%;
     }
 }
 
@@ -129,12 +193,12 @@ body {
         color: #777;
     }
 }
-@media screen and (max-width:767px){
-    body{
-        padding-top:40px;
+@media screen and (max-width: 767px) {
+    body {
+        padding-top: 40px;
     }
-    .c-logo{
-        margin-bottom:-40px;
+    .c-logo {
+        margin-bottom: -40px;
     }
 }
 
@@ -154,9 +218,13 @@ body {
 .c-wiki {
     border: 1px solid #dcdfe6;
     border-radius: 4px;
-    //margin-top: 20px;
+    margin-top: 20px;
     background-color: #fff;
     padding: 10px;
+
+    li{
+        list-style:none;
+    }
 
     .u-title {
         font-size: 14px;
@@ -191,7 +259,7 @@ body {
 
 //搜索结果
 .el-tabs {
-    // margin-top: 20px;
+    margin-top: 20px;
     background-color: #fff;
     padding-top: 10px;
 }
@@ -206,51 +274,29 @@ body {
     margin-right: 5px;
 }
 
-//谷歌搜索样式重定义
-body {
-    &.gsc-overflow-hidden {
-        overflow: auto !important;
-    }
-    .gsc-modal-background-image-visible,
-    .gsc-results-close-btn {
-        display: none !important;
-    }
-    .gsc-results-wrapper-overlay {
-        position: static !important;
-        box-shadow: none !important;
-        width: 100% !important;
-        height: auto !important;
-        padding: 0;
-        overflow: visible;
-    }
-}
-
 //百度搜索
 .c-baidu {
-    .u-tip{
-        margin:5px 10px;
+    .u-tip {
+        margin: 5px 10px;
         background-color: @bg;
-        padding:5px;
-        border:1px solid @border;
-        border-radius:4px;
-        font-size:14px;
-        color:#555;
-        em{
-            color:@blue;
+        padding: 5px;
+        border: 1px solid @border;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #555;
+        em {
+            color: @blue;
         }
-    }
-    iframe {
-        width: 100%;
-        height: 1500px;
+        display: none;
     }
 }
-@media screen and (max-width:767px){
-    .c-baidu .u-tip{
-        display:none;
-    }
-    .c-baidu iframe{
-        //margin-top:-60px;
-    }
+iframe {
+    width: 100%;
+    height: 1500px;
 }
-
+// @media screen and (max-width: 767px) {
+//     .c-baidu iframe {
+//         margin-top:-60px;
+//     }
+// }
 </style>
