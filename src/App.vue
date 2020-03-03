@@ -136,6 +136,8 @@ export default {
 
 <style lang="less">
 @import "./assets/css/var.less";
+@ipad : 1024px;
+@ipad-y : 767px;
 html {
     background-color: @bg;
 }
@@ -147,7 +149,7 @@ body {
         text-decoration: none;
     }
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: @ipad) {
     body {
         max-width: 90%;
     }
@@ -193,7 +195,7 @@ body {
         color: #777;
     }
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: @ipad-y) {
     body {
         padding-top: 40px;
     }
@@ -212,6 +214,11 @@ body {
     position: relative;
     top: -2px;
     margin-right: 5px;
+}
+@media screen and (max-width:@ipad-y){
+    .el-input-group__prepend{
+        display:none;
+    }
 }
 
 //百科词条
