@@ -41,7 +41,8 @@
                 <template v-if="cseapi.length">
                     <li class="u-item" v-for="(item,i) in cseapi" :key="'cseapi-'+i">
                         <a class="u-title" v-bind:href="item.formattedUrl" v-html="item.title" target="_blank"></a>
-                        <span class="u-link">{{item.formattedUrl}}</span>
+                        <span class="u-link">{{item.url}}</span>
+                        <!-- <img class="u-pic" v-if="item.richSnippet.cseImage" :src="item.richSnippet.cseImage.src | ossMirror" :height="item.richSnippet.cseThumbnail.height | shrinkPic"> -->
                         <span class="u-desc" v-html="item.content"></span>
                     </li>
                 </template>
@@ -108,7 +109,7 @@ export default {
                     eval(res.data)
                     this.cseapi = window.__cse_result.results || []
                     this.proxySuccess()
-                    // console.dir(this.cseapi)
+                    console.dir(this.cseapi)
                 }else{
                     this.proxyFailed()
                 }
@@ -168,7 +169,13 @@ export default {
         // cseExtract : function (url){
         //     let uri = new URI(url)
         //     return uri.search(true).q
-        // }
+        // },
+        ossMirror : function (url){
+            return url.replace(JX3BOX.__ossRoot,JX3BOX.__ossMirror)
+        },
+        shrinkPic : function (val){
+            return 60
+        }
     },
     mounted: function() {
         this.init();
@@ -329,9 +336,11 @@ body {
     .u-item{
         margin-bottom:20px;
         list-style:none;
+        *zoom:1;
+        &:after{content:"";display:table;clear:both;}
     }
 
-    .u-title,.u-link,.u-desc{
+    .u-title,.u-link{
         display: block;
     }
 
@@ -349,6 +358,12 @@ body {
         line-height: 2;
         color:@gray;
     }
+
+    .u-pic{
+        float:left;
+        margin-right:10px;
+    }
+
     .u-desc{
         font-size:14px;
         line-height: 1.6;
