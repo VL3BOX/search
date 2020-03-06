@@ -313,7 +313,6 @@ body {
     border-radius:6px;
     padding:20px;
     margin-top:20px;
-    color:#333;
 
     a{
         color:@hover;
@@ -328,7 +327,7 @@ body {
     }
 
     .u-item{
-        margin-bottom:15px;
+        margin-bottom:20px;
         list-style:none;
     }
 
@@ -340,7 +339,7 @@ body {
         font-size:16px;
         line-height: 1.5;
         letter-spacing: 0.6px;
-        b{color:#dd4b39;}
+        b{color:@pink;}
         &:hover{
             text-decoration:underline;
         }
@@ -348,24 +347,27 @@ body {
     .u-link{
         font-size:12px;
         line-height: 2;
-        color:#006621;
+        color:@gray;
     }
     .u-desc{
         font-size:14px;
         line-height: 1.6;
-        color:#545454;
+        color:@desc;
         letter-spacing: 0.6px;
+        b{
+            color:@pink;
+        }
     }
 }
 .m-footer{
     font-size:12px;
-    color:#888;
+    color:@gray;
 
     a{
         float:right;
-        color:#888;
+        color:@gray;
         &:hover{
-            color:#f39;
+            color:@pink;
         }
     }
 }
