@@ -40,7 +40,7 @@
             <ul class="u-list">
                 <template v-if="cseapi.length">
                     <li class="u-item" v-for="(item,i) in cseapi" :key="'cseapi-'+i">
-                        <a class="u-title" v-bind:href="item.formattedUrl" v-html="item.title" target="_blank"></a>
+                        <a class="u-title" v-bind:href="item.url" v-html="item.title" target="_blank"></a>
                         <span class="u-link">{{item.url}}</span>
                         <!-- <img class="u-pic" v-if="item.richSnippet.cseImage" :src="item.richSnippet.cseImage.src | ossMirror" :height="item.richSnippet.cseThumbnail.height | shrinkPic"> -->
                         <span class="u-desc" v-html="item.content"></span>
