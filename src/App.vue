@@ -108,7 +108,7 @@ export default {
                     eval(res.data)
                     this.cseapi = window.__cse_result.results || []
                     this.proxySuccess()
-                    console.dir(this.cseapi)
+                    // console.dir(this.cseapi)
                 }else{
                     this.proxyFailed()
                 }
@@ -132,7 +132,6 @@ export default {
         },
         checkNull(){
             if(!this.cseapi.length && !this.localapi.length){
-                console.log(this.isnull)
                 this.isnull = true
             }
         },
