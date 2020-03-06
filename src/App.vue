@@ -38,13 +38,6 @@
         </ul>
         <div class="m-result">
             <ul class="u-list">
-                <template v-if="jsonapi.length">
-                    <li class="u-item" v-for="(item,i) in jsonapi" :key="'jsonapi-'+i">
-                        <a class="u-title" v-bind:href="item.link" v-html="item.htmlTitle" target="_blank"></a>
-                        <span class="u-link">{{item.htmlFormattedUrl}}</span>
-                        <span class="u-desc">{{item.snippet}}</span>
-                    </li>
-                </template>
                 <template v-if="cseapi.length">
                     <li class="u-item" v-for="(item,i) in cseapi" :key="'cseapi-'+i">
                         <a class="u-title" v-bind:href="item.formattedUrl" v-html="item.title" target="_blank"></a>
@@ -83,8 +76,6 @@ export default {
             type: "all",
             //wiki 结果
             wiki: [],
-            //json api结果
-            jsonapi:[],
             //cse api结果
             cseapi:[],
             //local api结果
@@ -112,33 +103,20 @@ export default {
             //TODO:wiki结果返回
         },
         getResultFromPorxy(){
-            //step.1 尝试从jsonapi接口获取结果
-            axios.get(this.url_jsonapi).then((res) => {
+            return axios.get(this.url_cseapi).then((res) => {
                 if(res.data){
-                    this.jsonapi = res.data.items
+                    eval(res.data)
+                    this.cseapi = window.__cse_result.results || []
                     this.proxySuccess()
-                    // console.dir(res.data)
+                    console.dir(this.cseapi)
                 }else{
-                    throw new Error('json api crashed')
+                    this.proxyFailed()
                 }
-            }).catch((err) => {
-            //step.2 尝试从cse接口获取结果
-                axios.get(this.url_cseapi).then((res) => {
-                    if(res.data){
-                        eval(res.data)
-                        this.cseapi = window.__cse_result.results
-                        this.proxySuccess()
-                        // console.dir(this.cseapi)
-                    }else{
-                        this.proxyFailed()
-                    }
-                })
             })
         },
         clearExistData(){
             this.isnull = false
             this.wiki = []
-            this.jsonapi = []
             this.cseapi = []
             this.localapi = []
         },
@@ -151,14 +129,19 @@ export default {
         },
         getResultFromLocal(){
             //TODO:本地查询
-            // this.isnull = true
+        },
+        checkNull(){
+            if(!this.cseapi.length && !this.localapi.length){
+                console.log(this.isnull)
+                this.isnull = true
+            }
         },
         postRecord(){
             axios.post(JX3BOX.__spider + "jx3stat/search",{
                 q : this.q,
                 type : this.type 
             }).then(res => {
-                console.log(res)
+                // console.log(res)
             });
         },
         search() {
@@ -169,10 +152,14 @@ export default {
             this.getResultFromWiki()
 
             //尝试从代理获取结果
-            this.getResultFromPorxy()
-
-            //如果代理都失败，请求本地接口
-            if(!this.proxy) this.getResultFromLocal()
+            this.getResultFromPorxy().then((proxy_result) => {
+                //如果代理都失败，请求本地接口
+                if(!this.cseapi.length){
+                    this.getResultFromLocal()
+                }
+            }).finally(() => {
+                this.checkNull()
+            })
 
             //统计记录
             this.postRecord()
