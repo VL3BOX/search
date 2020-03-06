@@ -1,143 +1,195 @@
 <template>
     <div id="app">
-        <div class="c-logo">
-            <img src="./assets/img/logo.png" alt="JX3BOX" />
-            <a href="https://www.jx3box.com">JX3BOX</a>
-            <hr />
-            <p>搜索中心</p>
-        </div>
-        <div class="c-search">
+        <div class="m-search">
             <el-input
                 placeholder="请输入内容"
                 v-model="q"
                 class="input-with-select"
                 @change="search"
-                clearable 
+                clearable
             >
-                <template slot="prepend">JX3BOX</template>
-                <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
-                    <el-option label="百度" value="百度"
-                        ><img
-                            src="./assets/img/baidu.png"
-                            alt="百度"
-                        />百度</el-option
-                    >
-                    <el-option label="Google" value="Google"
-                        ><img
-                            src="./assets/img/google.png"
-                            alt="Google"
-                        />Google</el-option
-                    >
-                </el-select> -->
+                <!-- <template slot="prepend">JX3BOX</template> -->
+                <el-select
+                    v-model="type"
+                    slot="prepend"
+                    placeholder="请选择"
+                    class="m-search-type"
+                >
+                    <el-option label="全站" value="all">全站</el-option>
+                    <!-- <el-option label="宏库" value="macro">宏库</el-option>
+                    <el-option label="副本" value="fb">副本</el-option>
+                    <el-option label="职业" value="bps">职业</el-option> -->
+                </el-select>
                 <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
         </div>
-        <ul class="c-wiki" v-if="wiki.length">
-            <li v-for="(item,i) in wiki" :key="'wiki-' + i">
-                <a class="u-mark" href="https://剑网3.com" target="_blank"
-                    >剑网3.com</a
-                >
-                <a class="u-title" :href="'https://剑网3.com/' + item.key" target="_blank"
-                    >剑网3.com/{{item.key}}</a
-                >
+        <ul class="m-wiki" v-if="wiki.length">
+            <li v-for="(item, i) in wiki" :key="'wiki-' + i">
+                <a class="u-mark" href="https://剑网3.com" target="_blank">剑网3.com</a>
+                <a
+                    class="u-title"
+                    :href="'https://剑网3.com/' + item.key"
+                    target="_blank"
+                    >剑网3.com/{{ item.key }}</a>
                 <div class="u-desc">
-                    {{item.desc}}
+                    {{ item.desc }}
                 </div>
             </li>
         </ul>
-        <el-tabs v-model="activeTab">
-            <el-tab-pane name="baidu">
-                <span slot="label"
-                    ><img src="./assets/img/baidu.png" alt="百度" />百度</span
-                >
-                <div class="c-baidu">
-                    <p class="u-tip">
-                        使用百度进行站内搜索时，请勿删除前面的<em
-                            >site:jx3box.com</em
-                        >
-                    </p>
-                    <iframe
-                        ref="iframe_baidu"
-                        :src="url_baidu"
-                        frameborder="0"
-                    ></iframe>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane name="google">
-                <span slot="label"
-                    ><img
-                        src="./assets/img/google.png"
-                        alt="Google"
-                    />Google</span
-                >
-                <div class="c-google">
-                    <iframe ref="iframe_google" :src="url_google" frameborder="0"></iframe>
-                </div>
-            </el-tab-pane>
-        </el-tabs>
+        <div class="m-result">
+            <el-alert v-if="isnull" title="未检索到相关结果" type="info"></el-alert>
+            <ul class="u-list">
+                <template v-if="jsonapi.length">
+                    <li class="u-item" v-for="(item,i) in jsonapi" :key="'jsonapi-'+i">
+                        <a class="u-title" v-bind:href="item.link" v-html="item.htmlTitle" target="_blank"></a>
+                        <span class="u-link">{{item.htmlFormattedUrl}}</span>
+                        <span class="u-desc">{{item.snippet}}</span>
+                    </li>
+                </template>
+                <template v-if="cseapi.length">
+                    <li class="u-item" v-for="(item,i) in cseapi" :key="'cseapi-'+i">
+                        <a class="u-title" v-bind:href="item.formattedUrl" v-html="item.title" target="_blank"></a>
+                        <span class="u-link">{{item.formattedUrl}}</span>
+                        <span class="u-desc" v-html="item.content"></span>
+                    </li>
+                </template>
+            </ul>
+        </div>
     </div>
 </template>
 
 <script>
-const axios = require('axios');
-const baidu_path = 'https://www.baidu.com/s?word=site%3Ajx3box.com+'
-const google_path = './google_proxy.html?q='
-const {JX3BOX} = require('@jx3box/jx3box-config');
+const axios = require("axios");
+const { JX3BOX } = require("@jx3box/jx3box-config");
+const URI = require('urijs');
+
+function googlecse(data){
+    window.__cse_result = data
+}
+
 export default {
     name: "App",
     data: function() {
         return {
+            //搜索词
             q: "",
-            //select: "百度",
-            activeTab: "baidu",
-            wiki : [],
-            url_baidu: '',
-            url_google: '',
-            };
+            //类型
+            type: "all",
+            //wiki 结果
+            wiki: [],
+            //json api结果
+            jsonapi:[],
+            //cse api结果
+            cseapi:[],
+            //local api结果
+            localapi:[],
+            //代理请求状态
+            proxy:true,
+            //loading
+            loading:null
+        };
     },
     computed: {
-        s: function() {
-            return encodeURIComponent(this.q);
+        url_jsonapi: function() {
+            return JX3BOX.__proxy + 'gsearch/jsonapi?q=' + this.q
         },
+        url_cseapi : function (){
+            return JX3BOX.__proxy + 'gsearch/cseapi?q=' + this.q
+        },
+        isnull : function (){
+            return !this.wiki.length && !this.jsonapi.length && !this.cseapi.length && !this.localapi.length
+        }
     },
     methods: {
         init(){
-            //get query words, update base data
             let _q = location.search.slice(3);
             this.q = _q ? decodeURIComponent(_q) : "剑网3";
         },
-        search() {
-            //load iframe
-            this.build()
-
-            //record for statistics
-            axios.post(JX3BOX.__spider + 'jx3search?q=' + this.q).then((res) => {
-                console.log('i o u')
+        getResultFromWiki(){
+            //TODO:wiki结果返回
+        },
+        getResultFromPorxy(){
+            //step.1 尝试从jsonapi接口获取结果
+            axios.get(this.url_jsonapi).then((res) => {
+                if(res.data){
+                    this.jsonapi = res.data.items
+                    this.proxySuccess()
+                    // console.dir(res.data)
+                }else{
+                    throw new Error('json api crashed')
+                }
+            }).catch((err) => {
+            //step.2 尝试从cse接口获取结果
+                axios.get(this.url_cseapi).then((res) => {
+                    if(res.data){
+                        eval(res.data)
+                        this.cseapi = window.__cse_result.results
+                        this.proxySuccess()
+                        // console.dir(this.cseapi)
+                    }else{
+                        this.proxyFailed()
+                    }
+                })
             })
         },
-        build(){
-            this.url_baidu = baidu_path + this.s
-            this.url_google = google_path + this.s
+        clearExistData(){
+            this.wiki = []
+            this.jsonapi = []
+            this.cseapi = []
+            this.localapi = []
         },
+        proxySuccess(){
+            this.proxy = true
+        },
+        proxyFailed(){
+            this.proxy = false
+            //TODO:管理通知
+        },
+        getResultFromLocal(){
+            //TODO:本地查询
+        },
+        postRecord(){
+            axios.post(JX3BOX.__spider + "jx3stat/search",{
+                q : this.q,
+                type : this.type 
+            }).then(res => {
+                console.log(res)
+            });
+        },
+        search() {
+            //清空数据
+            this.clearExistData()
+
+            //加载wiki结果
+            this.getResultFromWiki()
+
+            //尝试从代理获取结果
+            this.getResultFromPorxy()
+
+            //如果代理都失败，请求本地接口
+            if(!this.proxy) this.getResultFromLocal()
+
+            //统计记录
+            this.postRecord()
+        }
+    },
+    filters:{
+        cseExtract : function (url){
+            let uri = new URI(url)
+            return uri.search(true).q
+        }
     },
     mounted: function() {
-        this.init()
-        this.build()
-
-        //TODO:init wiki results
-        // {
-        //     key : '关键词',
-        //     desc : '描述',
-        //     url : 'link'
-        // }
+        this.init();
+        this.search();
     }
 };
 </script>
 
 <style lang="less">
 @import "./assets/css/var.less";
-@ipad : 1024px;
-@ipad-y : 767px;
+@ipad: 1024px;
+@ipad-y: 767px;
 html {
     background-color: @bg;
 }
@@ -156,7 +208,7 @@ body {
 }
 
 //logo
-.c-logo {
+.m-logo {
     margin: 0 auto;
     text-align: center;
 
@@ -199,7 +251,7 @@ body {
     body {
         padding-top: 40px;
     }
-    .c-logo {
+    .m-logo {
         margin-bottom: -40px;
     }
 }
@@ -215,22 +267,22 @@ body {
     top: -2px;
     margin-right: 5px;
 }
-@media screen and (max-width:@ipad-y){
-    .el-input-group__prepend{
-        display:none;
+@media screen and (max-width: @ipad-y) {
+    .m-search-type {
+        display: none;
     }
 }
 
 //百科词条
-.c-wiki {
+.m-wiki {
     border: 1px solid #dcdfe6;
     border-radius: 4px;
     margin-top: 20px;
     background-color: #fff;
     padding: 10px;
 
-    li{
-        list-style:none;
+    li {
+        list-style: none;
     }
 
     .u-title {
@@ -265,45 +317,51 @@ body {
 }
 
 //搜索结果
-.el-tabs {
-    margin-top: 20px;
+.m-result{
     background-color: #fff;
-    padding-top: 10px;
-}
-.el-tabs__header {
-    padding: 0 15px;
-}
-.el-tabs__item img {
-    width: 20px;
-    vertical-align: middle;
-    position: relative;
-    top: -2px;
-    margin-right: 5px;
-}
+    border-radius:6px;
+    padding:20px;
+    margin-top:20px;
+    color:#333;
 
-//百度搜索
-.c-baidu {
-    .u-tip {
-        margin: 5px 10px;
-        background-color: @bg;
-        padding: 5px;
-        border: 1px solid @border;
-        border-radius: 4px;
-        font-size: 14px;
-        color: #555;
-        em {
-            color: @blue;
+    a{
+        color:@hover;
+    }
+    a:visited{
+        color:@visited;
+    }
+
+    .u-list{
+        padding:0;
+        margin:0;
+    }
+
+    .u-item{
+        margin-bottom:15px;
+        list-style:none;
+    }
+
+    .u-title,.u-link,.u-desc{
+        display: block;
+    }
+
+    .u-title{
+        font-size:16px;
+        line-height: 1.5;
+        b{color:#dd4b39;}
+        &:hover{
+            text-decoration:underline;
         }
-        display: none;
+    }
+    .u-link{
+        font-size:12px;
+        line-height: 1.5;
+        color:#006621;
+    }
+    .u-desc{
+        font-size:14px;
+        line-height: 1.6;
+        color:#545454;
     }
 }
-iframe {
-    width: 100%;
-    height: 1500px;
-}
-// @media screen and (max-width: 767px) {
-//     .c-baidu iframe {
-//         margin-top:-60px;
-//     }
-// }
 </style>
