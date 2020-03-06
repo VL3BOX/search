@@ -37,7 +37,6 @@
             </li>
         </ul>
         <div class="m-result">
-            <el-alert v-if="isnull" title="未检索到相关结果" type="info"></el-alert>
             <ul class="u-list">
                 <template v-if="jsonapi.length">
                     <li class="u-item" v-for="(item,i) in jsonapi" :key="'jsonapi-'+i">
@@ -54,7 +53,14 @@
                     </li>
                 </template>
             </ul>
+            <template v-if="isnull">
+                <el-alert title="未检索到相关结果" type="info"></el-alert>
+            </template>
         </div>
+        <p class="m-footer">
+            &copy; www.jx3box.com
+            <a href="https://www.jx3box.com/feedback" target="_blank">❤ 反馈建议</a>
+        </p>
     </div>
 </template>
 
@@ -86,7 +92,7 @@ export default {
             //代理请求状态
             proxy:true,
             //loading
-            loading:null
+            isnull:false
         };
     },
     computed: {
@@ -96,9 +102,6 @@ export default {
         url_cseapi : function (){
             return JX3BOX.__proxy + 'gsearch/cseapi?q=' + this.q
         },
-        isnull : function (){
-            return !this.wiki.length && !this.jsonapi.length && !this.cseapi.length && !this.localapi.length
-        }
     },
     methods: {
         init(){
@@ -133,6 +136,7 @@ export default {
             })
         },
         clearExistData(){
+            this.isnull = false
             this.wiki = []
             this.jsonapi = []
             this.cseapi = []
@@ -147,6 +151,7 @@ export default {
         },
         getResultFromLocal(){
             //TODO:本地查询
+            // this.isnull = true
         },
         postRecord(){
             axios.post(JX3BOX.__spider + "jx3stat/search",{
@@ -174,10 +179,10 @@ export default {
         }
     },
     filters:{
-        cseExtract : function (url){
-            let uri = new URI(url)
-            return uri.search(true).q
-        }
+        // cseExtract : function (url){
+        //     let uri = new URI(url)
+        //     return uri.search(true).q
+        // }
     },
     mounted: function() {
         this.init();
@@ -195,7 +200,7 @@ html {
 }
 body {
     padding: 100px 10px 20px 10px;
-    max-width: 62%;
+    max-width: 880px;
     margin: 0 auto;
     a {
         text-decoration: none;
@@ -258,7 +263,7 @@ body {
 
 //搜索框
 .el-input-group__prepend .el-select {
-    width: 100px;
+    width: 80px;
 }
 .el-select-dropdown__item img {
     width: 20px;
@@ -327,9 +332,9 @@ body {
     a{
         color:@hover;
     }
-    a:visited{
-        color:@visited;
-    }
+    // a:visited{
+    //     color:@visited;
+    // }
 
     .u-list{
         padding:0;
@@ -348,6 +353,7 @@ body {
     .u-title{
         font-size:16px;
         line-height: 1.5;
+        letter-spacing: 0.6px;
         b{color:#dd4b39;}
         &:hover{
             text-decoration:underline;
@@ -355,13 +361,26 @@ body {
     }
     .u-link{
         font-size:12px;
-        line-height: 1.5;
+        line-height: 2;
         color:#006621;
     }
     .u-desc{
         font-size:14px;
         line-height: 1.6;
         color:#545454;
+        letter-spacing: 0.6px;
+    }
+}
+.m-footer{
+    font-size:12px;
+    color:#888;
+
+    a{
+        float:right;
+        color:#888;
+        &:hover{
+            color:#f39;
+        }
     }
 }
 </style>
