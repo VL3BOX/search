@@ -40,8 +40,8 @@
             <ul class="u-list">
                 <template v-if="cseapi.length">
                     <li class="u-item" v-for="(item,i) in cseapi" :key="'cseapi-'+i">
-                        <a class="u-title" v-bind:href="item.url" v-html="item.title" target="_blank"></a>
-                        <span class="u-link">{{item.url}}</span>
+                        <a class="u-title" v-bind:href="item.url | decode" v-html="item.title" target="_blank"></a>
+                        <span class="u-link">{{item.url | decode}}</span>
                         <!-- <img class="u-pic" v-if="item.richSnippet.cseImage" :src="item.richSnippet.cseImage.src | ossMirror" :height="item.richSnippet.cseThumbnail.height | shrinkPic"> -->
                         <span class="u-desc" v-html="item.content"></span>
                     </li>
@@ -61,7 +61,7 @@
 <script>
 const axios = require("axios");
 const { JX3BOX } = require("@jx3box/jx3box-config");
-const URI = require('urijs');
+// const URI = require('urijs');
 
 function googlecse(data){
     window.__cse_result = data
@@ -175,6 +175,9 @@ export default {
         },
         shrinkPic : function (val){
             return 60
+        },
+        decode : function (url){
+            return decodeURIComponent(url)
         }
     },
     mounted: function() {
@@ -357,6 +360,9 @@ body {
         font-size:12px;
         line-height: 2;
         color:@gray;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .u-pic{
