@@ -8,64 +8,36 @@
                 @change="search"
                 clearable
             >
-                <!-- <template slot="prepend">JX3BOX</template> -->
                 <el-select
                     v-model="type"
                     slot="prepend"
                     placeholder="请选择"
                     class="m-search-type"
                 >
-                    <el-option label="全站" value="all">全站</el-option>
-                    <!-- <el-option label="宏库" value="macro">宏库</el-option>
-                    <el-option label="副本" value="fb">副本</el-option>
-                    <el-option label="职业" value="bps">职业</el-option> -->
+                    <el-option label="作品" value="all">作品</el-option>
+                    <el-option label="作者" value="author">作者</el-option>
+                    <el-option label="谷歌" value="google">Google</el-option>
                 </el-select>
                 <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
         </div>
-        <ul class="m-wiki" v-if="wiki.length">
-            <li v-for="(item, i) in wiki" :key="'wiki-' + i">
-                <a class="u-mark" href="https://剑网3.com" target="_blank">剑网3.com</a>
-                <a
-                    class="u-title"
-                    :href="'https://剑网3.com/' + item.key"
-                    target="_blank"
-                    >剑网3.com/{{ item.key }}</a>
-                <div class="u-desc">
-                    {{ item.desc }}
-                </div>
-            </li>
-        </ul>
-        <div class="m-result">
-            <ul class="u-list">
-                <template v-if="cseapi.length">
-                    <li class="u-item" v-for="(item,i) in cseapi" :key="'cseapi-'+i">
-                        <a class="u-title" v-bind:href="item.url | decode" v-html="item.title" target="_blank"></a>
-                        <span class="u-link">{{item.url | decode}}</span>
-                        <!-- <img class="u-pic" v-if="item.richSnippet.cseImage" :src="item.richSnippet.cseImage.src | ossMirror" :height="item.richSnippet.cseThumbnail.height | shrinkPic"> -->
-                        <span class="u-desc" v-html="item.content"></span>
-                    </li>
-                </template>
-            </ul>
-            <template v-if="isnull">
-                <el-alert title="未检索到相关结果" type="info"></el-alert>
-            </template>
-        </div>
-        <p class="m-footer">
-            &copy; www.jx3box.com
-            <a href="https://www.jx3box.com/feedback" target="_blank">❤ 反馈建议</a>
-        </p>
+        
+        <Wiki :data="wiki"/>
+        <Post :data="post" v-show="isPost" :q="q"/>
+        <Author :data="author" v-show="isAuthor" :q="q"/>
+        <Google v-if="isGoogle" :q="q"/>
     </div>
 </template>
 
 <script>
 const axios = require("axios");
-const { JX3BOX } = require("@jx3box/jx3box-config");
+const { JX3BOX } = require("@jx3box/jx3box-common");
 // const URI = require('urijs');
 
-function googlecse(data){
-    window.__cse_result = data
-}
+import Wiki from '@/components/Wiki.vue';
+import Post from '@/components/Post.vue';
+import Author from '@/components/Author.vue';
+import Google from '@/components/Google.vue';
 
 export default {
     name: "App",
@@ -75,73 +47,66 @@ export default {
             q: "",
             //类型
             type: "all",
-            //wiki 结果
+            //结果
             wiki: [],
-            //cse api结果
-            cseapi:[],
-            //local api结果
-            localapi:[],
-            //代理请求状态
-            proxy:true,
-            //loading
-            isnull:false
+            post:[],
+            author:[]
         };
     },
-    computed: {
-        url_jsonapi: function() {
-            return JX3BOX.__proxy + 'gsearch/jsonapi?q=' + this.q
+    computed : {
+        isPost : function (){
+            return this.type == 'all'
         },
-        url_cseapi : function (){
-            return JX3BOX.__proxy + 'gsearch/cseapi?q=' + this.q
+        isAuthor : function (){
+            return this.type == 'author'
         },
+        isGoogle : function (){
+            return this.type == 'google'
+        }
     },
     methods: {
         init(){
             let _q = location.search.slice(3);
-            this.q = _q ? decodeURIComponent(_q) : "剑网3";
+            this.q = _q ? decodeURIComponent(_q) : "";
+        },
+        clearExistData(){
+            this.wiki = []
+            this.post = []
+            this.author = []
         },
         getResultFromWiki(){
             //TODO:wiki结果返回
         },
-        getResultFromPorxy(){
-            return axios.get(this.url_cseapi).then((res) => {
-                if(res.data){
-                    eval(res.data)
-                    this.cseapi = window.__cse_result.results || []
-                    this.proxySuccess()
-                    console.dir(this.cseapi)
-                }else{
-                    this.proxyFailed()
+        getResultFromPost(){
+            axios.get(JX3BOX.__server + 'search/post/',{
+                params: {
+                    q : this.q,
+                    // type : this.type 
                 }
+            }).then((res) => {
+                console.log(res.data)
+                this.post = res.data
+            }).catch((err) => {
+                console.error('[Server/search] post api exception')
             })
         },
-        clearExistData(){
-            this.isnull = false
-            this.wiki = []
-            this.cseapi = []
-            this.localapi = []
-        },
-        proxySuccess(){
-            this.proxy = true
-        },
-        proxyFailed(){
-            this.proxy = false
-            //TODO:管理通知
-        },
-        getResultFromLocal(){
-            //TODO:本地查询
-        },
-        checkNull(){
-            if(!this.cseapi.length && !this.localapi.length){
-                this.isnull = true
-            }
+        getResultFromAuthor(){
+            axios.get(JX3BOX.__server + 'search/author/',{
+                params: {
+                    q : this.q,
+                }
+            }).then((res) => {
+                this.author = res.data
+            }).catch((err) => {
+                console.error('[Server/search] author api exception')
+            })
         },
         postRecord(){
             axios.post(JX3BOX.__spider + "jx3stat/search",{
                 q : this.q,
                 type : this.type 
             }).then(res => {
-                // console.log(res)
+                // console.info(res)
             });
         },
         search() {
@@ -150,16 +115,8 @@ export default {
 
             //加载wiki结果
             this.getResultFromWiki()
-
-            //尝试从代理获取结果
-            this.getResultFromPorxy().then((proxy_result) => {
-                //如果代理都失败，请求本地接口
-                if(!this.cseapi.length){
-                    this.getResultFromLocal()
-                }
-            }).finally(() => {
-                this.checkNull()
-            })
+            this.getResultFromPost()
+            this.getResultFromAuthor()
 
             //统计记录
             this.postRecord()
@@ -170,19 +127,19 @@ export default {
         //     let uri = new URI(url)
         //     return uri.search(true).q
         // },
-        ossMirror : function (url){
-            return url.replace(JX3BOX.__ossRoot,JX3BOX.__ossMirror)
-        },
-        shrinkPic : function (val){
-            return 60
-        },
-        decode : function (url){
-            return decodeURIComponent(url)
-        }
+        // ossMirror : function (url){
+        //     return url.replace(JX3BOX.__ossRoot,JX3BOX.__ossMirror)
+        // },
     },
     mounted: function() {
         this.init();
         this.search();
+    },
+    components : {
+        Wiki,
+        Post,
+        Author,
+        Google
     }
 };
 </script>
@@ -274,112 +231,7 @@ body {
     }
 }
 
-//百科词条
-.m-wiki {
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    margin-top: 20px;
-    background-color: #fff;
-    padding: 10px;
-
-    li {
-        list-style: none;
-    }
-
-    .u-title {
-        font-size: 14px;
-        color: @blue;
-        text-decoration: none;
-        box-shadow: 0 1px 0 @blue;
-        &:hover {
-            color: @hover;
-            box-shadow: 0 1px 0 @hover;
-        }
-    }
-    .u-desc {
-        font-size: 13px;
-        line-height: 1.6;
-        margin-top: 5px;
-        color: #909399;
-    }
-
-    position: relative;
-    .u-mark {
-        background-color: @black;
-        color: #fff;
-        border-radius: 2px;
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        font-size: 12px;
-        padding: 2px 4px;
-        font-style: normal;
-    }
-}
-
-//搜索结果
-.m-result{
-    background-color: #fff;
-    border-radius:6px;
-    padding:20px;
-    margin-top:20px;
-
-    a{
-        color:@hover;
-    }
-    // a:visited{
-    //     color:@visited;
-    // }
-
-    .u-list{
-        padding:0;
-        margin:0;
-    }
-
-    .u-item{
-        margin-bottom:20px;
-        list-style:none;
-        *zoom:1;
-        &:after{content:"";display:table;clear:both;}
-    }
-
-    .u-title,.u-link{
-        display: block;
-    }
-
-    .u-title{
-        font-size:16px;
-        line-height: 1.5;
-        letter-spacing: 0.6px;
-        b{color:@pink;}
-        &:hover{
-            text-decoration:underline;
-        }
-    }
-    .u-link{
-        font-size:12px;
-        line-height: 2;
-        color:@gray;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .u-pic{
-        float:left;
-        margin-right:10px;
-    }
-
-    .u-desc{
-        font-size:14px;
-        line-height: 1.6;
-        color:@desc;
-        letter-spacing: 0.6px;
-        b{
-            color:@pink;
-        }
-    }
-}
+//底部
 .m-footer{
     font-size:12px;
     color:@gray;

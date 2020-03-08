@@ -1,3 +1,16 @@
+<script>
+    function postMsgToParent(name, q, promos, results) {
+        let H = document.body.scrollHeight
+        console.log(`[Proxy msg] ${H}`)
+        window.parent.postMessage(H,'*');
+    }
+    window.__gcse || (window.__gcse = {});
+    window.__gcse.searchCallbacks = {
+        web: {
+            rendered: "postMsgToParent"
+        }
+    };
+</script>
 <div class="gcse-searchresults-only"></div>
 <script
     async
