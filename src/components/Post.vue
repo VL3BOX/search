@@ -1,15 +1,20 @@
 <template>
-    <div class="m-post" v-if="q">
-        <ul class="u-list" v-if="data.length">
-            <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                <a class="u-title" v-bind:href="formatURL(item)" target="_blank">{{
-                    item.post_title
-                }}</a>
-                <span class="u-link"><time class="u-date">{{formatDate(item.post_modified)}}</time> {{ formatURL(item) }}</span>
-                <span class="u-desc">{{ formatContent(item.post_content) }}</span>
-            </li>
-        </ul>
-        <el-alert v-else title="未检索到相关结果" type="info"></el-alert>
+    <div class="m-post">
+        <div v-if="q">
+            <ul class="u-list" v-if="data.length">
+                <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
+                    <a class="u-title" v-bind:href="formatURL(item)" target="_blank">{{
+                        item.post_title
+                    }}</a>
+                    <span class="u-link"><time class="u-date">{{formatDate(item.post_modified)}}</time> {{ formatURL(item) }}</span>
+                    <span class="u-desc">{{ formatContent(item.post_content) }}</span>
+                </li>
+            </ul>
+            <el-alert v-show="status" title="未检索到相关结果" type="info"></el-alert>
+        </div>
+        <div v-else>
+            <el-alert title="请输入搜索内容" type="success"></el-alert>
+        </div>
     </div>
 </template>
 
@@ -19,7 +24,7 @@ const dateFormat = require('../utils/dateFormat');
 
 export default {
     name: "Post",
-    props: ["data","q"],
+    props: ["data","q","status"],
     methods: {
         formatURL: function(item) {
             // TODO:转rewrite新版地址

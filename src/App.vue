@@ -23,8 +23,8 @@
         </div>
         
         <Wiki :data="wiki"/>
-        <Post :data="post" v-show="isPost" :q="q"/>
-        <Author :data="author" v-show="isAuthor" :q="q"/>
+        <Post :data="post" v-show="isPost" :q="q" :status="postIsNull"/>
+        <Author :data="author" v-show="isAuthor" :q="q" :status="authorIsNull"/>
         <Google v-if="isGoogle" :q="q"/>
     </div>
 </template>
@@ -50,7 +50,10 @@ export default {
             //结果
             wiki: [],
             post:[],
-            author:[]
+            author:[],
+            //状态
+            postIsNull:false,
+            authorIsNull:false,
         };
     },
     computed : {
@@ -69,10 +72,9 @@ export default {
             let _q = location.search.slice(3);
             this.q = _q ? decodeURIComponent(_q) : "";
         },
-        clearExistData(){
-            this.wiki = []
-            this.post = []
-            this.author = []
+        clearStatus(){
+            this.postIsNull = false
+            this.authorIsNull = false
         },
         getResultFromWiki(){
             //TODO:wiki结果返回
@@ -84,8 +86,8 @@ export default {
                     // type : this.type 
                 }
             }).then((res) => {
-                console.log(res.data)
                 this.post = res.data
+                if(!res.data.length) this.postIsNull = true
             }).catch((err) => {
                 console.error('[Server/search] post api exception')
             })
@@ -97,6 +99,7 @@ export default {
                 }
             }).then((res) => {
                 this.author = res.data
+                if(!res.data.length) this.authorIsNull = true
             }).catch((err) => {
                 console.error('[Server/search] author api exception')
             })
@@ -110,8 +113,10 @@ export default {
             });
         },
         search() {
-            //清空数据
-            this.clearExistData()
+            if(!this.q) return
+
+            //清空状态
+            this.clearStatus()
 
             //加载wiki结果
             this.getResultFromWiki()

@@ -1,15 +1,20 @@
 <template>
-    <div class="m-author" v-if="q">
-        <ul class="u-list" v-if="data.length">
-            <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                <a class="u-author" v-bind:href="formatURL(item)" target="_blank">
-                    <img class="u-avatar" :src="formatAvatar(item.avatar)" :alt="item.display_name">
-                    <b class="u-name">{{item.display_name}}</b>
-                    <span class="u-desc" v-html="item.description"></span>
-                </a>
-            </li>
-        </ul>
-        <el-alert v-else title="未检索到相关结果" type="info"></el-alert>
+    <div class="m-author">
+        <div v-if="q">
+            <ul class="u-list" v-if="data.length">
+                <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
+                    <a class="u-author" v-bind:href="formatURL(item)" target="_blank">
+                        <img class="u-avatar" :src="formatAvatar(item.avatar)" :alt="item.display_name">
+                        <b class="u-name">{{item.display_name}}</b>
+                        <span class="u-desc" v-html="item.description"></span>
+                    </a>
+                </li>
+            </ul>
+            <el-alert v-show="status" title="未检索到相关结果" type="info"></el-alert>
+        </div>
+        <div v-else>
+            <el-alert title="请输入搜索内容" type="success"></el-alert>
+        </div>
     </div>
 </template>
 
@@ -17,7 +22,7 @@
 const { JX3BOX } = require("@jx3box/jx3box-common");
 export default {
     name: "Author",
-    props: ["data","q"],
+    props: ["data","q","status"],
     methods: {
         formatURL: function(item) {
             return `${JX3BOX.__Root}author/${item.ID}`;
