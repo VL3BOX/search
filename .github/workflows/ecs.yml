@@ -1,0 +1,30 @@
+name: Deploy To ECS
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Build
+    - run: npm install && npm run build
+
+    - name: Deploy
+      uses: easingthemes/ssh-deploy@v2.0.7
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
+        ARGS: "-avz --delete"
+        SOURCE: "dist/"
+        REMOTE_HOST: ${{ secrets.ECS_IP }} 
+        REMOTE_USER: ${{ secrets.ECS_USER }}
+        TARGET: ${{ secrets.ECS_PATH }}
+        

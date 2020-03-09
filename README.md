@@ -2,6 +2,7 @@
 
 ## 环境
 @启动：`npm run serve`  
+@构建：`npm run build`    
 @部署：HuaweiSH && gh-pages  
 @域名：https://search.jx3box.com    
 @DNS: 境外github，境内HuaweiSH  
