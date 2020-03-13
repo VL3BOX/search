@@ -177,13 +177,13 @@ body {
 
     img {
         width: 60px;
-        vertical-align: middle;
+        vertical-align: top;
         margin-right: 10px;
     }
     a {
         display: inline-block;
-        vertical-align: middle;
         font-size: 42px;
+        line-height: 60px;
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
             Helvetica, sans-serif;
         font-weight: 600;
@@ -242,11 +242,14 @@ body {
     color:@gray;
 
     a{
-        float:right;
         color:@gray;
         &:hover{
             color:@pink;
         }
+    }
+
+    .u-feedback{
+        float:right;
     }
 }
 </style>

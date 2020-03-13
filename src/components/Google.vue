@@ -1,6 +1,6 @@
 <template>
     <div class="m-google" :style="{height:H + 'px'}">
-        <el-alert v-if="!q && isfirst" title="国内用户无梯子将无法使用本功能" type="warning" show-icon></el-alert>
+        <el-alert v-if="!q && isfirst" title="国内用户无梯子将无法使用本功能，请知晓" type="warning" show-icon></el-alert>
         <iframe v-show="q && !vpnerror" :src="url" frameborder="0"></iframe>
         <el-alert v-show="vpnerror" title="你的梯子出现故障啦，无法连接到谷妈~" type="error" show-icon></el-alert>
     </div>
