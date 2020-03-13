@@ -1,7 +1,5 @@
 {
-  "name": "search",
-  "homepage": "https://search.jx3box.com",
-  "version": "0.1.0",
+  "name": "jx3box-search",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,7 +8,7 @@
     "inspect": "vue inspect > output.js"
   },
   "dependencies": {
-    "@jx3box/jx3box-common": "^1.0.13",
+    "@jx3box/jx3box-common": "^1.0.14",
     "axios": "^0.19.2",
     "core-js": "^3.4.3",
     "element-ui": "^2.4.5",
