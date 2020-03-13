@@ -80,7 +80,7 @@ export default {
             //TODO:wiki结果返回
         },
         getResultFromPost(){
-            axios.get(JX3BOX.__api + 'search/post/',{
+            axios.get(JX3BOX.__api + 'post/',{
                 params: {
                     q : this.q,
                     // type : this.type 
@@ -93,7 +93,7 @@ export default {
             })
         },
         getResultFromAuthor(){
-            axios.get(JX3BOX.__api + 'search/author/',{
+            axios.get(JX3BOX.__api + 'author/',{
                 params: {
                     q : this.q,
                 }
