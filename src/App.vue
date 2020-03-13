@@ -80,7 +80,7 @@ export default {
             //TODO:wiki结果返回
         },
         getResultFromPost(){
-            axios.get(JX3BOX.__server + 'search/post/',{
+            axios.get(JX3BOX.__api + 'search/post/',{
                 params: {
                     q : this.q,
                     // type : this.type 
@@ -89,11 +89,11 @@ export default {
                 this.post = res.data
                 if(!res.data.length) this.postIsNull = true
             }).catch((err) => {
-                console.error('[Server/search] post api exception')
+                console.error('[API/post] post api exception')
             })
         },
         getResultFromAuthor(){
-            axios.get(JX3BOX.__server + 'search/author/',{
+            axios.get(JX3BOX.__api + 'search/author/',{
                 params: {
                     q : this.q,
                 }
@@ -101,7 +101,7 @@ export default {
                 this.author = res.data
                 if(!res.data.length) this.authorIsNull = true
             }).catch((err) => {
-                console.error('[Server/search] author api exception')
+                console.error('[API/author] author api exception')
             })
         },
         postRecord(){
