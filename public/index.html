@@ -8,14 +8,13 @@
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Cache-Control" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
-        <title>搜索 &raquo; JX3BOX - 一站式剑网3资源工具站</title>
-        <meta name="Keywords" content="剑网3,JX3BOX,剑三魔盒"/>
-        <meta name="Description" content="搜索剑三的一切.."/>
+        <base href="<%= htmlWebpackPlugin.options.base %>">
+        <title><%= htmlWebpackPlugin.options.title %></title>
         <link rel="icon" href="./favicon.ico" />
     </head>
     <body>
         <div class="m-logo">
-            <a href="https://www.jx3box.com"><img src="./logo.png" alt="JX3BOX" />JX3BOX</a>
+            <a href="/"><img src="./logo.png" alt="JX3BOX" />JX3BOX</a>
             <hr />
             <p>搜索中心</p>
         </div>
