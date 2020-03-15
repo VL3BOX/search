@@ -6,7 +6,7 @@ https://search.jx3box.com
 + @启动 : `npm run serve`  
 + @构建 : `npm run build`    
 + @存储 : //oss/jx3box-search && gh-pages  
-+ @部署 : actions自动推送
++ @部署 : actions自动推送github + oss
 + @DNS : 国内oss cdn,国外github pages
 
 
