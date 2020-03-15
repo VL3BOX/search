@@ -1,43 +1,51 @@
 <template>
     <div id="app">
-        <div class="m-search">
-            <el-input
-                placeholder="请输入内容"
-                v-model="q"
-                class="input-with-select"
-                @change="search"
-                clearable
-            >
-                <el-select
-                    v-model="type"
-                    slot="prepend"
-                    placeholder="请选择"
-                    class="m-search-type"
+        <Top />
+        <main>
+            <div class="m-search">
+                <el-input
+                    placeholder="请输入内容"
+                    v-model="q"
+                    class="input-with-select"
+                    @change="search"
+                    clearable
                 >
-                    <el-option label="作品" value="all">作品</el-option>
-                    <el-option label="作者" value="author">作者</el-option>
-                    <el-option label="谷歌" value="google">Google</el-option>
-                </el-select>
-                <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-        </div>
-        
-        <Wiki :data="wiki"/>
-        <Post :data="post" v-show="isPost" :q="q" :status="postIsNull"/>
-        <Author :data="author" v-show="isAuthor" :q="q" :status="authorIsNull"/>
-        <Google v-if="isGoogle" :q="q"/>
+                    <el-select
+                        v-model="type"
+                        slot="prepend"
+                        placeholder="请选择"
+                        class="m-search-type"
+                        @change="typeChange"
+                    >
+                        <el-option label="作品" value="all">作品</el-option>
+                        <el-option label="作者" value="author">作者</el-option>
+                        <el-option label="谷歌" value="google"
+                            >Google</el-option
+                        >
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div>
+            <Wiki :data="wiki" />
+            <Post :data="post" v-show="isPost" :q="q" :status="postIsNull" />
+            <Author :data="author" v-show="isAuthor" :q="q" :status="authorIsNull"/>
+            <Google v-if="isGoogle" :q="q" />
+        </main>
+        <Bottom />
     </div>
 </template>
 
 <script>
 const axios = require("axios");
 const { JX3BOX } = require("@jx3box/jx3box-common");
-// const URI = require('urijs');
+const URI = require("urijs");
 
-import Wiki from '@/components/Wiki.vue';
-import Post from '@/components/Post.vue';
-import Author from '@/components/Author.vue';
-import Google from '@/components/Google.vue';
+import Top from "@/components/Top.vue";
+import Bottom from "@/components/Bottom.vue";
+import Wiki from "@/components/Wiki.vue";
+import Post from "@/components/Post.vue";
+import Author from "@/components/Author.vue";
+import Google from "@/components/Google.vue";
 
 export default {
     name: "App",
@@ -46,101 +54,120 @@ export default {
             //搜索词
             q: "",
             //类型
-            type: "all",
+            type: "",
             //结果
             wiki: [],
-            post:[],
-            author:[],
+            post: [],
+            author: [],
             //状态
-            postIsNull:false,
-            authorIsNull:false,
+            postIsNull: false,
+            authorIsNull: false
         };
     },
-    computed : {
-        isPost : function (){
-            return this.type == 'all'
+    computed: {
+        isPost: function() {
+            return this.type == "all";
         },
-        isAuthor : function (){
-            return this.type == 'author'
+        isAuthor: function() {
+            return this.type == "author";
         },
-        isGoogle : function (){
-            return this.type == 'google'
+        isGoogle: function() {
+            return this.type == "google";
         }
     },
     methods: {
-        init(){
-            let _q = location.search.slice(3);
-            this.q = _q ? decodeURIComponent(_q) : "";
+        init() {
+            let query = URI(location.href).query(true)
+            this.q = query.q || ''
+            this.type = query.type || 'all'
         },
-        clearStatus(){
-            this.postIsNull = false
-            this.authorIsNull = false
+        clearStatus() {
+            this.postIsNull = false;
+            this.authorIsNull = false;
         },
-        getResultFromWiki(){
+        getResultFromWiki() {
             //TODO:wiki结果返回
         },
-        getResultFromPost(){
-            axios.get(JX3BOX.__api + 'post/',{
-                params: {
-                    q : this.q,
-                    // type : this.type 
-                }
-            }).then((res) => {
-                this.post = res.data
-                if(!res.data.length) this.postIsNull = true
-            }).catch((err) => {
-                console.error('[API/post] post api exception')
-            })
+        getResultFromPost() {
+            axios
+                .get(JX3BOX.__api + "post/", {
+                    params: {
+                        q: this.q
+                        // type : this.type
+                    }
+                })
+                .then(res => {
+                    this.post = res.data;
+                    if (!res.data.length) this.postIsNull = true;
+                })
+                .catch(err => {
+                    console.error("[API/post] post api exception");
+                });
         },
-        getResultFromAuthor(){
-            axios.get(JX3BOX.__api + 'author/',{
-                params: {
-                    q : this.q,
-                }
-            }).then((res) => {
-                this.author = res.data
-                if(!res.data.length) this.authorIsNull = true
-            }).catch((err) => {
-                console.error('[API/author] author api exception')
-            })
+        getResultFromAuthor() {
+            axios
+                .get(JX3BOX.__api + "author/", {
+                    params: {
+                        q: this.q
+                    }
+                })
+                .then(res => {
+                    this.author = res.data;
+                    if (!res.data.length) this.authorIsNull = true;
+                })
+                .catch(err => {
+                    console.error("[API/author] author api exception");
+                });
         },
-        postRecord(){
-            axios.post(JX3BOX.__spider + "jx3stat/search",{
-                q : this.q,
-                type : this.type 
-            }).then(res => {
-                // console.info(res)
-            });
+        postRecord() {
+            axios
+                .post(JX3BOX.__spider + "jx3stat/search", {
+                    q: this.q,
+                    type: this.type
+                })
+                .then(res => {
+                    // console.info(res)
+                });
         },
         search() {
-            if(!this.q) return
+            if (!this.q) return;
 
             //清空状态
-            this.clearStatus()
+            this.clearStatus();
 
-            //加载wiki结果
-            this.getResultFromWiki()
-            this.getResultFromPost()
-            this.getResultFromAuthor()
+            //加载结果  
+            switch(this.type){
+                case 'all':
+                    this.getResultFromPost();
+                    break;
+                case 'author':
+                    this.getResultFromAuthor();
+                    break;
+                case 'wiki':
+                    this.getResultFromWiki();
+                    break;
+            }
 
             //统计记录
-            this.postRecord()
+            this.postRecord();
+        },
+        typeChange(){
+            this.search()
         }
     },
-    filters:{
+    filters: {
         // cseExtract : function (url){
         //     let uri = new URI(url)
         //     return uri.search(true).q
-        // },
-        // ossMirror : function (url){
-        //     return url.replace(JX3BOX.__ossRoot,JX3BOX.__ossMirror)
         // },
     },
     mounted: function() {
         this.init();
         this.search();
     },
-    components : {
+    components: {
+        Top,
+        Bottom,
         Wiki,
         Post,
         Author,
@@ -150,81 +177,36 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/var.less";
-@ipad: 1024px;
-@ipad-y: 767px;
 html {
     background-color: @bg;
 }
 body {
-    padding: 100px 10px 20px 10px;
+    padding: 100px 10px @space 10px;
     max-width: 880px;
     margin: 0 auto;
     a {
         text-decoration: none;
     }
+    font-family: -apple-system, "Microsoft YaHei", Trebuchet MS, Calibri,
+        BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica, sans-serif;
+    text-rendering: optimizelegibility;
 }
 @media screen and (max-width: @ipad) {
     body {
         max-width: 90%;
     }
 }
-
-//logo
-.m-logo {
-    margin: 0 auto;
-    text-align: center;
-
-    img {
-        width: 60px;
-        vertical-align: top;
-        margin-right: 10px;
-    }
-    a {
-        display: inline-block;
-        font-size: 42px;
-        line-height: 60px;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
-            Helvetica, sans-serif;
-        font-weight: 600;
-        letter-spacing: 2px;
-        -webkit-font-smoothing: antialiased;
-        margin: 0;
-        color: @black;
-    }
-    hr {
-        border: none;
-        max-width: 40%;
-        height: 1px;
-        background-color: @border;
-        margin: 20px auto;
-    }
-    p {
-        position: relative;
-        font-size: 13px;
-        letter-spacing: 20px;
-        top: -42px;
-        background: @bg;
-        display: inline-block;
-        padding-left: 20px;
-        color: #777;
-    }
-}
 @media screen and (max-width: @ipad-y) {
     body {
         padding-top: 40px;
     }
-    .m-logo {
-        margin-bottom: -40px;
-    }
 }
-
 //搜索框
 .el-input-group__prepend .el-select {
     width: 80px;
 }
 .el-select-dropdown__item img {
-    width: 20px;
+    width: @space;
     vertical-align: middle;
     position: relative;
     top: -2px;
@@ -233,23 +215,6 @@ body {
 @media screen and (max-width: @ipad-y) {
     .m-search-type {
         display: none;
-    }
-}
-
-//底部
-.m-footer{
-    font-size:12px;
-    color:@gray;
-
-    a{
-        color:@gray;
-        &:hover{
-            color:@pink;
-        }
-    }
-
-    .u-feedback{
-        float:right;
     }
 }
 </style>

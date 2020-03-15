@@ -28,13 +28,12 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/var.less";
 //百科词条
 .m-wiki {
     ul{
         border: 1px solid #dcdfe6;
         border-radius: 4px;
-        margin-top: 20px;
+        margin-top: @space;
         background-color: #fff;
         padding: 10px;
     }

@@ -19,31 +19,29 @@
 </template>
 
 <script>
-const { JX3BOX } = require("@jx3box/jx3box-common");
 export default {
     name: "Author",
     props: ["data","q","status"],
     methods: {
         formatURL: function(item) {
-            return `${JX3BOX.__Root}author/${item.ID}`;
+            return `${this.$root.JX3BOX.__Root}author/${item.ID}`;
         },
-        formatAvatar : function (url){
+        formatAvatar :  function (url){
             return url 
-            ? url.replace(JX3BOX.__ossRoot,JX3BOX.__ossMirror) + JX3BOX.avatar_suffix_s
-            : JX3BOX.__ossMirror + JX3BOX.default_avatar + JX3BOX.avatar_suffix_s
+            ? this.$root.JX3BOX.utils.resolveImagePath(url) + this.$root.JX3BOX.avatar_suffix_s
+            : this.$root.JX3BOX.default_avatar + this.$root.JX3BOX.avatar_suffix_s
         }
     },
 };
 </script>
 
 <style lang="less">
-@import "../assets/css/var.less";
 //搜索结果
 .m-author {
     background-color: #fff;
     border-radius: 6px;
-    padding: 20px;
-    margin-top: 20px;
+    padding: @space;
+    margin-top: @space;
 
     a {
         color: @hover;
@@ -54,7 +52,7 @@ export default {
     }
 
     .u-item {
-        margin-bottom: 20px;
+        margin-bottom: @space;
         list-style: none;
     }
 
@@ -77,7 +75,7 @@ export default {
 
     .u-avatar{
         float:left;
-        margin-right:20px;
+        margin-right:@space;
     }
 
     .u-name {

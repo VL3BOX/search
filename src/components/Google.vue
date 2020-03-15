@@ -7,7 +7,6 @@
 </template>
 
 <script>
-const { JX3BOX } = require("@jx3box/jx3box-common");
 export default {
     name: "Google",
     props: ["q"],
@@ -39,13 +38,12 @@ export default {
 </script> 
 
 <style lang="less">
-@import "../assets/css/var.less";
 //搜索结果
 .m-google {
     background-color: #fff;
     border-radius: 6px;
-    padding: 20px;
-    margin-top: 20px;
+    padding: @space;
+    margin-top: @space;
 
     iframe{
         width:100%;

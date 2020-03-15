@@ -19,7 +19,6 @@
 </template>
 
 <script>
-const { JX3BOX } = require("@jx3box/jx3box-common");
 const dateFormat = require('../utils/dateFormat');
 
 export default {
@@ -28,7 +27,7 @@ export default {
     methods: {
         formatURL: function(item) {
             // TODO:转rewrite新版地址
-            return `${JX3BOX.__Root}?p=${item.ID}`;
+            return `${this.$root.JX3BOX.__Root}?p=${item.ID}`;
         },
         formatContent: function(content) {
             return content
@@ -44,13 +43,12 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/var.less";
 //搜索结果
 .m-post {
     background-color: #fff;
     border-radius: 6px;
-    padding: 20px;
-    margin-top: 20px;
+    padding: @space;
+    margin-top: @space;
 
     a {
         color: @hover;
@@ -61,7 +59,7 @@ export default {
     }
 
     .u-item {
-        margin-bottom: 20px;
+        margin-bottom: @space;
         list-style: none;
         *zoom: 1;
         &:after {

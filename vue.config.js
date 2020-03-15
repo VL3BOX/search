@@ -1,39 +1,64 @@
+const path = require('path');
 const pkg = require("./package.json");
-const { JX3BOX,SEO } = require("@jx3box/jx3box-common");
-const Setting = require('./settings');
+const { JX3BOX, SEO } = require("@jx3box/jx3box-common");
+const Setting = require("./setting.json");
+
 
 module.exports = {
 
-    //国内使用oss cdn分发域，国外使用本地文件
+    //❤️ define path for static files ~
     publicPath:
-        process.env.NODE_ENV === "production"
-            ? `${JX3BOX.__static}${pkg.name}/`
-            // : `/${pkg.name}/`,  //部署在sub path时
-            : `/`,  //部署在根path时
+        //🌈 use oss path
+        (process.env.STATIC_MODE === "oss" && `${JX3BOX.__static}${pkg.name}/`) || 
+        //🌸 use github domain with sub repo path
+        (process.env.STATIC_MODE === "repo" && `/${pkg.name}/`) || 
+        //🌷 use github custom repo domain
+        '/' ,
+
 
     chainWebpack: config => {
-    //html-webpack-plugin插件相关的配置
+
+        //💘 html-webpack-plugin ~
         config.plugin("html").tap(args => {
-
-            console.log(args)
-
-            //自动添加标题后缀
-            args[0].title = Setting.title + SEO.title
-
-            //设置SEO信息
-            args[0].meta = {
-                'Keywords' : Setting.keys,
-                'Description' : Setting.desc
-            }
-
-            // html模板中不需要经过render部分的站内链接
-            args[0].base = JX3BOX.__Root
-
-            // 国内环境不压缩，方便即时部署自动解决冲突；
-            // 国外环境因为使用github pages但使用的是development方案，所以要压缩
-            args[0].minify = process.env.NODE_ENV === "production" ? false : true
-
-            return args
+            args[0].meta = {                            //------设置SEO信息
+                Keywords: Setting.keys,
+                Description: Setting.desc
+            };
+            args[0].title = Setting.title + SEO.title,  //------自动添加标题后缀
+            args[0].minify = false;                     //------不压缩
+            return args;
         });
+
+
+        //💝 in-line small imgs ~
+        config.module
+            .rule("images")
+            .use("url-loader")
+            .loader("url-loader")
+            .tap(options => Object.assign(options, { limit: 10240 }));
+
+
+        //💝 in-line svg imgs ~
+        config.module
+			.rule("vue")
+			.use("vue-svg-inline-loader")
+            .loader("vue-svg-inline-loader")
+
+
+        //💖 import common less var * mixin ~
+        const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
+        types.forEach(type => addStyleResource(config.module.rule('less').oneOf(type)));
+        function addStyleResource (rule) {
+            rule.use('style-resource')
+              .loader('style-resources-loader')
+              .options({
+                patterns: [
+                    path.resolve(__dirname, './src/assets/css/var.less'),
+                ],
+            })
+        }
+
+
+
     }
 };
