@@ -25,7 +25,7 @@ module.exports = {
                 Description: Setting.desc
             };
             args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
-            // args[0].minify = false;                  //------不压缩
+            args[0].minify = false;                     //------不压缩,方便必要时使用ECS部署作为回源,由cdn负责压缩
             return args;
         });
 
