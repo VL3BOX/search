@@ -19,6 +19,7 @@
 </template>
 
 <script>
+const {Utils} = require('@jx3box/jx3box-common');
 export default {
     name: "Author",
     props: ["data","q","status"],
@@ -28,7 +29,7 @@ export default {
         },
         formatAvatar :  function (url){
             return url 
-            ? this.$root.JX3BOX.utils.resolveImagePath(url) + this.$root.JX3BOX.avatar_suffix_s
+            ? Utils.resolveImagePath(url) + this.$root.JX3BOX.avatar_suffix_s
             : this.$root.JX3BOX.default_avatar + this.$root.JX3BOX.avatar_suffix_s
         }
     },
