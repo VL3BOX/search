@@ -7,13 +7,13 @@ const Setting = require("./setting.json");
 module.exports = {
 
     //❤️ define path for static files ~
-    publicPath:
+    publicPath:'/',
         //🌈 use oss path
-        (process.env.STATIC_MODE === "oss" && `${JX3BOX.__static}${pkg.name}/`) || 
+        // (process.env.STATIC_MODE === "oss" && `${JX3BOX.__static}${pkg.name}/`) || 
         //🌸 use github domain with sub repo path
-        (process.env.STATIC_MODE === "repo" && `/${pkg.name}/`) || 
+        // (process.env.STATIC_MODE === "repo" && `/${pkg.name}/`) || 
         //🌷 use github custom repo domain
-        '/' ,
+        // '/' ,
 
 
     chainWebpack: config => {
@@ -24,8 +24,8 @@ module.exports = {
                 Keywords: Setting.keys,
                 Description: Setting.desc
             };
-            args[0].title = Setting.title + SEO.title,  //------自动添加标题后缀
-            args[0].minify = false;                     //------不压缩
+            args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
+            // args[0].minify = false;                     //------不压缩
             return args;
         });
 
