@@ -7,7 +7,9 @@ const Setting = require("./setting.json");
 module.exports = {
 
     //❤️ define path for static files ~
-    publicPath:'/',
+    publicPath:
+        process.env.NODE_ENV === 'production' ? `${JX3BOX.__staticPath}${pkg.name}@gh-pages/` : '/',
+
         //🌈 use oss path
         // (process.env.STATIC_MODE === "oss" && `${JX3BOX.__static}${pkg.name}/`) || 
         //🌸 use github domain with sub repo path
