@@ -13,7 +13,7 @@
             <el-alert v-show="status" title="未检索到相关结果" type="info"></el-alert>
         </div>
         <div v-else>
-            <el-alert title="请输入搜索内容" type="success"></el-alert>
+            <el-alert title="请在上方搜索框输入内容" type="success"></el-alert>
         </div>
     </div>
 </template>
