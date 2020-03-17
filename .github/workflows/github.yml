@@ -9,8 +9,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
+
+    - name: Install && Build
+      run: |
+        npm install
+        npm run build
  
-    - name: Build and Deploy
+    - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       env:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -18,4 +23,3 @@ jobs:
         FOLDER: dist
         CLEAN: true
         CLEAN_EXCLUDE: '["css", "js"]'
-        BUILD_SCRIPT: npm install && npm run build
