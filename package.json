@@ -4,8 +4,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "root": "vue-cli-service build --mode root",
-    "repo": "vue-cli-service build --mode repo",
+    "oss": "vue-cli-service build --mode oss",
     "lint": "vue-cli-service lint",
     "inspect": "vue inspect > output.js"
   },
