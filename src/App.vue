@@ -37,7 +37,6 @@
 
 <script>
 const axios = require("axios");
-const { JX3BOX } = require("@jx3box/jx3box-common");
 const URI = require("urijs");
 
 import Top from "@/components/Top.vue";
@@ -90,7 +89,7 @@ export default {
         },
         getResultFromPost() {
             axios
-                .get(JX3BOX.__api + "post/", {
+                .get(this.$root.JX3BOX.__api + "post/", {
                     params: {
                         q: this.q
                         // type : this.type
@@ -106,7 +105,7 @@ export default {
         },
         getResultFromAuthor() {
             axios
-                .get(JX3BOX.__api + "author/", {
+                .get(this.$root.JX3BOX.__api + "author/", {
                     params: {
                         q: this.q
                     }
@@ -121,7 +120,7 @@ export default {
         },
         postRecord() {
             axios
-                .post(JX3BOX.__spider + "jx3stat/search", {
+                .post(this.$root.JX3BOX.__spider + "jx3stat/search", {
                     q: this.q,
                     type: this.type
                 })

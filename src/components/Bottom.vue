@@ -2,7 +2,7 @@
     <footer class="m-footer">
         &copy;
         <a :href="homepage" target="_blank">{{ domain }}</a>
-        <a class="u-feedback" :href="homepage + 'feedback'" target="_blank"
+        <a class="u-feedback" href="https://github.com/JX3BOX/jx3box.github.io/issues" target="_blank"
             >❤ 反馈建议</a
         >
     </footer>

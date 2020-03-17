@@ -12,7 +12,6 @@ module.exports = {
 
         //FOR ECS + GithubPages => BY jsdelivr
         (process.env.STATIC_PATH === "jsdelivr" && `${JX3BOX.__staticPath["jsdelivr"]}${pkg.name}@gh-pages/`) || 
-
         //FOR ECS + GithubPages => BY relative path
         (process.env.STATIC_PATH === "repo" && `/${pkg.name}/`) || 
 
