@@ -16,4 +16,5 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages
         FOLDER: dist
+        CLEAN_EXCLUDE: '["css", "js"]'
         BUILD_SCRIPT: npm install && npm run build

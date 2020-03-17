@@ -25,9 +25,10 @@ export default {
     },
     mounted : function (){
         window.addEventListener('message',(e)=>{
-            (typeof e.data == 'number') ?
+            console.log(e);
+            e.data.code ?
             this.$nextTick().then(()=>{
-                this.H = e.data + 50;
+                this.H = e.data.H;
             }) :
             this.vpnerror = true
 

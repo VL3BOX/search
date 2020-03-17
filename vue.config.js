@@ -3,20 +3,24 @@ const pkg = require("./package.json");
 const { JX3BOX, SEO } = require("@jx3box/jx3box-common");
 const Setting = require("./setting.json");
 
-
 module.exports = {
 
     //❤️ define path for static files ~
     publicPath:
-        process.env.NODE_ENV === 'production' ? `${JX3BOX.__staticPath}${pkg.name}@gh-pages/` : '/',
+        //FOR Localhost => development
+        (process.env.NODE_ENV === 'development' && '/') ||
 
-        //🌈 use oss path
-        // (process.env.STATIC_MODE === "oss" && `${JX3BOX.__static}${pkg.name}/`) || 
-        //🌸 use github domain with sub repo path
-        // (process.env.STATIC_MODE === "repo" && `/${pkg.name}/`) || 
-        //🌷 use github custom repo domain
-        // '/' ,
+        //FOR ECS + GithubPages => BY jsdelivr
+        (process.env.STATIC_PATH === "jsdelivr" && `${JX3BOX.__staticPath["jsdelivr"]}${pkg.name}@gh-pages/`) || 
 
+        //FOR ECS + GithubPages => BY relative path
+        (process.env.STATIC_PATH === "repo" && `/${pkg.name}/`) || 
+
+        //FOR ECS + GithubPages => BY root path or bind a domain
+        (process.env.STATIC_PATH == 'root' && '/') || 
+
+        //for lost
+        '/',
 
     chainWebpack: config => {
 
@@ -27,7 +31,6 @@ module.exports = {
                 Description: Setting.desc
             };
             args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
-            args[0].minify = false;                     //------不压缩,方便必要时使用ECS部署作为回源,由cdn负责压缩
             return args;
         });
 
