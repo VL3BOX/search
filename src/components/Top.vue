@@ -32,9 +32,9 @@ export default {
     }
     a {
         display: inline-block;
-        font-size: 60px;
+        font-size: 32px;
         line-height: 60px;
-        font-family: Trebuchet MS, Calibri, -apple-system, BlinkMacSystemFont,
+        font-family: Calibri, -apple-system, BlinkMacSystemFont,
             Segoe UI, Helvetica Neue, Helvetica, sans-serif;
         font-weight: 600;
         letter-spacing: 2px;

@@ -6,6 +6,9 @@
 Vue.config.productionTip = false;
 const { JX3BOX } = require("@jx3box/jx3box-common");
 
+// import JX3BOX_UI from '@jx3box/jx3box-common/vue'
+// Vue.use(JX3BOX_UI);
+
 import App from "./App.vue";
 new Vue({
     render: h => h(App),

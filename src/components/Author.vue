@@ -4,9 +4,9 @@
             <ul class="u-list" v-if="data.length">
                 <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
                     <a class="u-author" v-bind:href="formatURL(item)" target="_blank">
-                        <img class="u-avatar" :src="formatAvatar(item.avatar)" :alt="item.display_name">
-                        <b class="u-name">{{item.display_name}}</b>
-                        <span class="u-desc" v-html="item.description"></span>
+                        <img class="u-avatar" :src="formatAvatar(item.avatar)" :alt="item.name">
+                        <b class="u-name">{{item.name}}</b>
+                        <span class="u-desc" v-html="item.bio"></span>
                     </a>
                 </li>
             </ul>
@@ -25,12 +25,10 @@ export default {
     props: ["data","q","status"],
     methods: {
         formatURL: function(item) {
-            return `${this.$root.JX3BOX.__Root}author/${item.ID}`;
+            return `${this.$root.JX3BOX.__Root}author/${item.uid}`;
         },
         formatAvatar :  function (url){
-            return url 
-            ? Utils.resolveImagePath(url) + this.$root.JX3BOX.avatar_suffix_s
-            : this.$root.JX3BOX.default_avatar + this.$root.JX3BOX.avatar_suffix_s
+            return Utils.showAvatar(url,'s')
         }
     },
 };

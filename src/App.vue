@@ -89,7 +89,7 @@ export default {
         },
         getResultFromPost() {
             axios
-                .get(this.$root.JX3BOX.__api + "post/", {
+                .get(this.$root.JX3BOX.__server + "search/post", {
                     params: {
                         q: this.q
                         // type : this.type
@@ -105,7 +105,7 @@ export default {
         },
         getResultFromAuthor() {
             axios
-                .get(this.$root.JX3BOX.__api + "author/", {
+                .get(this.$root.JX3BOX.__server + "search/user", {
                     params: {
                         q: this.q
                     }
@@ -118,16 +118,16 @@ export default {
                     console.error("[API/author] author api exception");
                 });
         },
-        postRecord() {
-            axios
-                .post(this.$root.JX3BOX.__spider + "jx3stat/search", {
-                    q: this.q,
-                    type: this.type
-                })
-                .then(res => {
-                    // console.info(res)
-                });
-        },
+        // postRecord() {
+        //     axios
+        //         .post(this.$root.JX3BOX.__spider + "jx3stat/search", {
+        //             q: this.q,
+        //             type: this.type
+        //         })
+        //         .then(res => {
+        //             // console.info(res)
+        //         });
+        // },
         search() {
             if (!this.q) return;
 
@@ -148,7 +148,7 @@ export default {
             }
 
             //统计记录
-            this.postRecord();
+            // this.postRecord();
         },
         typeChange(){
             this.search()

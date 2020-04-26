@@ -1,8 +1,8 @@
 <template>
     <footer class="m-footer">
         &copy;
-        <a :href="homepage" target="_blank">{{ domain }}</a>
-        <a class="u-feedback" href="https://github.com/JX3BOX/jx3box.github.io/issues" target="_blank"
+        <a :href="homepage" target="_blank">JX3BOX.COM</a>
+        <a class="u-feedback" :href="feedback" target="_blank"
             >❤ 反馈建议</a
         >
     </footer>
@@ -14,7 +14,7 @@ export default {
     data: function() {
         return {
             homepage: this.$root.JX3BOX.__Root,
-            domain : this.$root.JX3BOX.__Domain
+            feedback : this.$root.JX3BOX.feedback
         };
     }
 };

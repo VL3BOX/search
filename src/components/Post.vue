@@ -51,7 +51,7 @@ export default {
     margin-top: @space;
 
     a {
-        color: @hover;
+        color: @color-link;
     }
     .u-list {
         padding: 0;
@@ -81,7 +81,7 @@ export default {
             color: @pink;
         }
         &:hover {
-            box-shadow: 0 1px 0 @blue;
+            box-shadow: 0 1px 0 @color-link;
         }
     }
     .u-link {
