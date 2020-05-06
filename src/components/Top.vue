@@ -1,7 +1,7 @@
 <template>
     <header class="m-logo">
         <a :href="homepage">
-            <img class="u-pic" svg-inline src="../../node_modules/@jx3box/jx3box-common/img/logo.svg" />
+            <img class="u-pic" svg-inline src="../assets/img/logo.svg" />
         </a>
         <hr />
         <p>搜索中心</p>
