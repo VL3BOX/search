@@ -1,43 +1,85 @@
 <template>
-    <div class="m-post">
-        <div v-if="q">
-            <ul class="u-list" v-if="data.length">
-                <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                    <a class="u-title" v-bind:href="formatURL(item)" target="_blank">{{
-                        item.post_title
-                    }}</a>
-                    <span class="u-link"><time class="u-date">{{formatDate(item.post_modified)}}</time> {{ formatURL(item) }}</span>
-                    <span class="u-desc">{{ formatContent(item.post_content) }}</span>
-                </li>
-            </ul>
-            <el-alert v-show="status" title="未检索到相关结果" type="info"></el-alert>
-        </div>
-        <div v-else>
-            <el-alert title="请在上方搜索框输入内容" type="success"></el-alert>
-        </div>
+    <div class="m-post" v-if="show">
+        <ul class="u-list" v-show="status == true">
+            <li class="u-item" v-for="(item, i) in list" :key="'item-' + i">
+                <a
+                    class="u-title"
+                    v-bind:href="formatURL(item)"
+                    target="_blank"
+                    >{{ item.post.post_title }}</a
+                >
+                <span class="u-link"
+                    ><time class="u-date">{{
+                        formatDate(item.post.post_modified)
+                    }}</time>
+                    {{ formatURL(item) }}</span
+                >
+                <span class="u-desc">{{
+                    formatContent(item.post.post_content)
+                }}</span>
+            </li>
+            <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="total"
+                @current-change="changePage"
+                hide-on-single-page
+            >
+            </el-pagination>
+        </ul>
+        <el-alert
+            v-show="status == false"
+            title="未检索到相关结果"
+            type="info"
+        ></el-alert>
     </div>
 </template>
 
 <script>
-const dateFormat = require('../utils/dateFormat');
+const dateFormat = require("../utils/dateFormat");
 
 export default {
     name: "Post",
-    props: ["data","q","status"],
+    data: function() {
+        return {
+        };
+    },
+    computed: {
+        status: function() {
+            return this.$store.state.q ? !!this.$store.state.post.total : null
+        },
+        total : function (){
+            return this.$store.state.post.total
+        },
+        list : function (){
+            return this.$store.state.post.list
+        },
+        show : function (){
+            return this.$store.state.type == 'post'
+        }
+    },
     methods: {
         formatURL: function(item) {
             // TODO:转rewrite新版地址
-            return `${this.$root.JX3BOX.__Root}?p=${item.ID}`;
+            return `${this.$root.JX3BOX.__Root}?p=${item.post.ID}`;
         },
         formatContent: function(content) {
-            return content
-                .replace(/<[^>]*>|/g, "")
-                .replace(/&nbsp;/g, "")
-                .slice(0, 200);
+            return (
+                content &&
+                content
+                    .replace(/<[^>]*>|/g, "")
+                    .replace(/&nbsp;/g, "")
+                    .slice(0, 200)
+            );
         },
-        formatDate : function (date){
-            return dateFormat(new Date(date))
-        }
+        formatDate: function(date) {
+            return dateFormat(new Date(date));
+        },
+        changePage: function(i) {
+            this.$store.commit('search',i)
+        },
+    },
+    mounted: function() {
     },
 };
 </script>
@@ -93,12 +135,12 @@ export default {
         text-overflow: ellipsis;
     }
 
-    .u-date{
+    .u-date {
         background-color: @bg;
-        color:@pink;
-        border-radius:2px;
-        padding:2px 5px;
-        font-weight:600;
+        color: @pink;
+        border-radius: 2px;
+        padding: 2px 5px;
+        font-weight: 600;
     }
 
     .u-pic {

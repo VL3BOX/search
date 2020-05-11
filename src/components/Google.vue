@@ -1,15 +1,12 @@
 <template>
-    <div class="m-google" :style="{height:H + 'px'}">
-        <el-alert v-if="!q && isfirst" title="国内用户无梯子将无法使用本功能，请知晓" type="warning" show-icon></el-alert>
-        <iframe v-show="q && !vpnerror" :src="url" frameborder="0"></iframe>
-        <el-alert v-show="vpnerror" title="你的梯子出现故障啦，无法连接到谷妈~" type="error" show-icon></el-alert>
+    <div class="m-google" :style="{height:H + 'px'}" v-if="show">
+        <iframe v-if="$store.state.q" :src="url" frameborder="0"></iframe>
     </div>
 </template>
 
 <script>
 export default {
     name: "Google",
-    props: ["q"],
     data : function (){
         return {
             H : 37,
@@ -19,9 +16,12 @@ export default {
     },
     computed : {
         url : function (){
-            return this.q ? './google_proxy.html?q=' + this.q : ''
+            return this.$store.state.q ? './google_proxy.html?q=' + this.$store.state.q : ''
             //https://cse.google.com/cse?cx=011450975203877314992:itycvatvhcp&q=
-        }
+        },
+        show : function (){
+            return this.$store.state.type == 'google'
+        },
     },
     mounted : function (){
         window.addEventListener('message',(e)=>{

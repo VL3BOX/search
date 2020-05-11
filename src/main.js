@@ -4,14 +4,12 @@
 // Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
-const { JX3BOX } = require("@jx3box/jx3box-common");
+const JX3BOX = require("@jx3box/jx3box-common/js/jx3box");
 
-// import JX3BOX_UI from '@jx3box/jx3box-common/vue'
-// Vue.use(JX3BOX_UI);
-
+import store from "./store";
 import App from "./App.vue";
 new Vue({
-    render: h => h(App),
-    data:{JX3BOX}
+    store,
+    render: (h) => h(App),
+    data: { JX3BOX },
 }).$mount("#app");
-
