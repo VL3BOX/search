@@ -65,7 +65,7 @@ export default {
             return Utils.showAvatar(url, "s");
         },
         changePage: function(i) {
-            this.$store.commit('search',i)
+            this.$store.commit('search',{page:i})
         },
     },
     mounted: function() {

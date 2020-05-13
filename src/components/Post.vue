@@ -76,7 +76,7 @@ export default {
             return dateFormat(new Date(date));
         },
         changePage: function(i) {
-            this.$store.commit('search',i)
+            this.$store.commit('search',{page:i})
         },
     },
     mounted: function() {

@@ -46,13 +46,13 @@ export default {
     methods: {
         search() {
             if (!this.q) return;
-            this.$store.commit('search')
+            this.$store.commit('search',{q:this.q,type:this.type})
         },
         init() {
-            let params = new URLSearchParams(location.href);
+            let params = new URLSearchParams(location.search);
             this.q = params.get('q') || "";
             this.type = params.get('type') || "post";
-            this.search();
+            this.search()
         },
     },
     mounted: function() {

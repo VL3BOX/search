@@ -17,15 +17,21 @@ let store = {
         changeType : function (state,payload){
             state.type = payload
         },
-        search : function (state,page){
+        search : function (state,payload){
+
+            let q = payload && payload.q || state.q
+            let type = payload && payload.type || state.type
+            let page = payload && payload.page || 1
+
+            console.log(q)
             
-            switch(state.type){
+            switch(type){
                 case 'post' : 
-                    return getPost(state.q,page).then((res) => {
+                    return getPost(q,page).then((res) => {
                         state.post = res.data.data
                     })
                 case 'author' : 
-                    return getAuthor(state.q,page).then((res) => {
+                    return getAuthor(q,page).then((res) => {
                         state.author = res.data.data
                     })
                 default:
