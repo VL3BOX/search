@@ -35,6 +35,7 @@
 
 <script>
 const { Utils } = require("@jx3box/jx3box-common");
+import {authorLink} from '@jx3box/jx3box-common/js/utils'
 
 export default {
     name: "Author",
@@ -58,8 +59,7 @@ export default {
     },
     methods: {
         formatURL: function(item) {
-            // TODO:转`换rewrite新版地址
-            return `${this.$root.JX3BOX.__Root}author/${item.ID}`;
+            return authorLink(item.ID)
         },
         formatAvatar: function(url) {
             return Utils.showAvatar(url, "s");

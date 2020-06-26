@@ -37,7 +37,7 @@
 
 <script>
 const dateFormat = require("../utils/dateFormat");
-
+import {postLink} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "Post",
     data: function() {
@@ -60,8 +60,7 @@ export default {
     },
     methods: {
         formatURL: function(item) {
-            // TODO:转rewrite新版地址
-            return `${this.$root.JX3BOX.__Root}?p=${item.post.ID}`;
+            return postLink(item.post.post_type,item.post.ID)
         },
         formatContent: function(content) {
             return (

@@ -20,7 +20,6 @@ export default {
 </script>
 
 <style lang="less">
-//TODO: 💤之后可能搞点什么logo动画,还没想好
 .m-logo {
     margin: 0 auto;
     text-align: center;
