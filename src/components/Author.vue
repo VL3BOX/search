@@ -35,41 +35,42 @@
 
 <script>
 const { Utils } = require("@jx3box/jx3box-common");
-import {authorLink} from '@jx3box/jx3box-common/js/utils'
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
+import { __Root } from "@jx3box/jx3box-common/js/jx3box.json";
 
 export default {
     name: "Author",
     data: function() {
-        return {
-        };
+        return {};
     },
     computed: {
         status: function() {
-            return this.$store.state.q ? !!this.$store.state.author.total : null
+            return this.$store.state.q
+                ? !!this.$store.state.author.total
+                : null;
         },
-        total : function (){
-            return this.$store.state.author.total
+        total: function() {
+            return this.$store.state.author.total;
         },
-        list : function (){
-            return this.$store.state.author.list
+        list: function() {
+            return this.$store.state.author.list;
         },
-        show : function (){
-            return this.$store.state.type == 'author'
-        }
+        show: function() {
+            return this.$store.state.type == "author";
+        },
     },
     methods: {
         formatURL: function(item) {
-            return authorLink(item.ID)
+            return __Root + 'author/?uid=' + item.ID;
         },
         formatAvatar: function(url) {
             return Utils.showAvatar(url, "s");
         },
         changePage: function(i) {
-            this.$store.commit('search',{page:i})
+            this.$store.commit("search", { page: i });
         },
     },
-    mounted: function() {
-    },
+    mounted: function() {},
 };
 </script>
 
