@@ -1,21 +1,18 @@
 <template>
-    <div class="m-author m-block" v-loading="loading">
+    <div class="m-item m-block" v-loading="loading">
         <ul class="u-list" v-if="data.length">
-            <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                <a
-                    class="u-author"
-                    v-bind:href="item | formatURL"
-                    target="_blank"
-                >
-                    <img
-                        class="u-avatar"
-                        :src="item.user_avatar | formatAvatar"
-                        :alt="item.display_name"
-                    />
-                    <b class="u-name">{{ item.display_name }}</b>
-                    <span class="u-desc">{{ item.user_bio }}</span>
-                </a>
-            </li>
+            <a
+                class="m-gem-item"
+                v-for="(item, i) in data"
+                :href="item.Link"
+                :key="i"
+                target="_blank"
+            >
+                <img class="u-icon" :src="item.IconID | icon" />
+                <span class="u-title">{{ item.Name }}</span>
+                <span class="u-desc">{{ item.Desc }}</span>
+                <span class="u-id">UUID:{{ item.UiID }}</span>
+            </a>
         </ul>
         <el-alert
             v-else
@@ -49,10 +46,15 @@
 </template>
 
 <script>
-import { authorLink, showAvatar } from "@jx3box/jx3box-common/js/utils";
-import { getAuthor } from "@/service/search";
+import { getItem } from "@/service/search";
+import {
+    __ossMirror,
+    __iconPath,
+    __ossRoot,
+} from "@jx3box/jx3box-common/js/jx3box";
 export default {
-    name: "Author",
+    name: "Item",
+    props: [],
     data: function() {
         return {
             loading: false,
@@ -60,7 +62,7 @@ export default {
             total: 1, //总条目数
             pages: 1, //总页数
             page: 1, //当前页数
-            per: 10, //每页条目
+            per: 15, //每页条目
         };
     },
     computed: {
@@ -72,26 +74,23 @@ export default {
         },
     },
     filters: {
-        formatURL: function(item) {
-            return authorLink(item.ID);
-        },
-        formatAvatar: function(url) {
-            return showAvatar(url, "s");
+        icon: function(id) {
+            return __iconPath + "icon/" + id + ".png";
         },
     },
     methods: {
         loadData: function(i = 1, append = false) {
             this.loading = true;
-            getAuthor(this.q, i)
+            getItem(this.q, i)
                 .then((res) => {
                     if (append) {
-                        this.data = this.data.concat(res.data.data.list);
+                        this.data = this.data.concat(res.data.data.data);
                     } else {
                         window.scrollTo(0, 0);
-                        this.data = res.data.data.list;
+                        this.data = res.data.data.data;
                     }
                     this.total = res.data.data.total;
-                    this.pages = res.data.data.pages;
+                    this.pages = res.data.data.last_page;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -116,65 +115,68 @@ export default {
 </script>
 
 <style lang="less">
-//搜索结果
-.m-author {
+.m-gem-item {
+    background-color: @bg-light;
+    border: 1px solid #eee;
+    .r(4px);
+    .mb(20px);
+    .db;
+    padding: 10px;
+    .clearfix;
 
-    a {
-        color: @hover;
-    }
-    .u-list {
-        padding: 0;
-        margin: 0;
-    }
-
-    .u-item {
-        margin-bottom: @space;
-        list-style: none;
-    }
-
-    .u-author {
-        display: block;
-        padding: 10px;
-        border: 1px solid #eee;
-        border-radius: 3px;
-        *zoom: 1;
-        img {
-            width: 68px;
-            height: 68px;
-        }
-        &:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-        background-color: #fafbfc;
-        &:hover {
-            border-color: #ddd;
-        }
+    .u-icon {
+        .r(4px);
+        .fl;
+        .mr(10px);
+        .size(48px);
     }
 
-    .u-avatar {
-        float: left;
-        margin-right: @space;
-    }
-
-    .u-name {
-        font-size: 16px;
-        line-height: 1.5;
-        letter-spacing: 0.6px;
-        color: @hover;
-        display: block;
+    .u-title {
+        .fz(14px, 1.4);
+        .db;
+        .mb(5px);
+        color:@primary;
     }
 
     .u-desc {
-        display: block;
-        font-size: 14px;
-        line-height: 1.6;
-        color: @desc;
-        letter-spacing: 0.6px;
-        b {
-            color: @pink;
+        color: #888;
+        .db;
+        .fz(12px);
+    }
+
+    transition: 0.06s border ease-in-out;
+    &:hover {
+        border-color: @primary;
+    }
+
+    .pr;
+    .u-point {
+        .pa;
+        .rt(10px);
+        .fz(13px, 18px);
+        color: #555;
+        font-style: normal;
+        img {
+            .size(18px);
+            .fl;
+            .mr(2px);
         }
+    }
+
+    .u-drops {
+        .fz(12px);
+    }
+    .u-drop {
+        color: #ff33ef;
+        .mr(5px);
+    }
+
+    .pr;
+    .u-id {
+        .pa;
+        .rt(10px);
+        color: #666;
+        .fz(12px);
     }
 }
 </style>

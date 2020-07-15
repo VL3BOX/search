@@ -2,21 +2,20 @@
     <footer class="m-footer">
         &copy;
         <a :href="homepage" target="_blank">JX3BOX.COM</a>
-        <a class="u-feedback" :href="feedback" target="_blank"
-            >❤ 反馈建议</a
-        >
+        <a class="u-feedback" :href="feedback" target="_blank">❤ 反馈建议</a>
     </footer>
 </template>
 
 <script>
+import { __Root, feedback } from "@jx3box/jx3box-common/js/jx3box";
 export default {
     name: "Bottom",
     data: function() {
         return {
-            homepage: this.$root.JX3BOX.__Root,
-            feedback : this.$root.JX3BOX.feedback
+            homepage: __Root,
+            feedback: feedback,
         };
-    }
+    },
 };
 </script>
 

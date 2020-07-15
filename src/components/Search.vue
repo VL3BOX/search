@@ -12,10 +12,11 @@
                 slot="prepend"
                 placeholder="请选择"
                 class="m-search-type"
-                @change="search"
             >
                 <el-option label="作品" value="post">作品</el-option>
                 <el-option label="作者" value="author">作者</el-option>
+                <el-option label="成就" value="cj">成就</el-option>
+                <el-option label="物品" value="item">物品</el-option>
                 <!-- <el-option label="百科" value="wiki">百科</el-option> -->
                 <el-option label="谷歌" value="google">Google</el-option>
             </el-select>
@@ -37,9 +38,6 @@ export default {
         };
     },
     watch: {
-        q : function (){
-            this.$store.commit('changeQuery',this.q)
-        },
         type : function (){
             this.$store.commit('changeType',this.type)
         }
@@ -47,7 +45,7 @@ export default {
     methods: {
         search() {
             if (!this.q) return;
-            this.$store.commit('search',{q:this.q,type:this.type})
+            this.$store.commit('changeQuery',this.q)
         },
         init() {
             let params = new URLSearchParams(location.search);

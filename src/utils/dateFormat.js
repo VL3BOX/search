@@ -18,4 +18,4 @@ function polish(val){
     return val<10 ? ('0' + val) : val
 }
 
-module.exports = dateFormat
+export default dateFormat

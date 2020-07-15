@@ -4,27 +4,30 @@
             <Top />
             <Search/>
         </header>
-        <main :class="{notNull:notNull}">
+        <main v-if="q" >
+            <Post v-if="type == 'post'"/>
+            <Author v-if="type == 'author'"/>
+            <Cj v-if="type == 'cj'"/>
+            <Item v-if="type == 'item'"/>
             <!-- <Wiki/> -->
-            <Post />
-            <Author />
-            <Google />
+            <Google v-if="type == 'google'"/>
         </main>
-        <footer>
-            <!-- <Bottom /> -->
+        <footer v-show="q">
+            <Bottom />
         </footer>
     </div>
 </template>
 
 <script>
 import Top from "@/components/Top.vue";
-// import Bottom from "@/components/Bottom.vue";
+import Bottom from "@/components/Bottom.vue";
 import Search from "@/components/Search.vue";
 import Wiki from "@/components/Wiki.vue";
 import Post from "@/components/Post.vue";
 import Author from "@/components/Author.vue";
+import Cj from "@/components/Cj.vue";
+import Item from "@/components/Item.vue";
 import Google from "@/components/Google.vue";
-
 
 export default {
     name: "App",
@@ -34,19 +37,24 @@ export default {
         };
     },
     computed: {
-        notNull : function (){
-            return !!this.$store.state.q.trim()
-        }
+        type : function (){
+            return this.$store.state.type
+        },
+        q : function (){
+            return this.$store.state.q  
+        },
     },
     methods: {},
     mounted: function() {},
     components: {
         Top,
-        // Bottom,
+        Bottom,
         Search,
         // Wiki,
         Post,
         Author,
+        Cj,
+        Item,
         Google,
     },
 };
@@ -77,10 +85,35 @@ body {
         padding-top: 40px;
     }
 }
-main{
-    display:none;
-    &.notNull{
-        display: block;
+.m-block{
+    background-color: #fff;
+    border-radius: 6px;
+    padding: @space;
+    margin-top: @space;
+
+    .u-list{
+        padding:0;
+        margin:0;
     }
+
+}
+// 为空
+.m-archive-null {
+    margin-top: 10px;
+}
+
+// 加载更多
+.m-archive-more {
+    .mb(10px);
+    .w(100%);
+    .none;
+}
+.m-archive-more.show {
+    .db;
+}
+
+// 分页
+.m-archive-pages {
+    overflow-x: auto;
 }
 </style>

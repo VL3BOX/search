@@ -9,13 +9,14 @@
 </template>
 
 <script>
+import { __Root } from "@jx3box/jx3box-common/js/jx3box";
 export default {
     name: "Logo",
     data: function() {
         return {
-            homepage: this.$root.JX3BOX.__Root
+            homepage: __Root,
         };
-    }
+    },
 };
 </script>
 
@@ -26,15 +27,15 @@ export default {
 
     .u-pic {
         width: 60px;
-        height:60px;
+        height: 60px;
         vertical-align: top;
     }
     a {
         display: inline-block;
         font-size: 32px;
         line-height: 60px;
-        font-family: Calibri, -apple-system, BlinkMacSystemFont,
-            Segoe UI, Helvetica Neue, Helvetica, sans-serif;
+        font-family: Calibri, -apple-system, BlinkMacSystemFont, Segoe UI,
+            Helvetica Neue, Helvetica, sans-serif;
         font-weight: 600;
         letter-spacing: 2px;
         -webkit-font-smoothing: antialiased;

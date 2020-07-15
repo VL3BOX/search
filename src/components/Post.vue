@@ -1,66 +1,82 @@
 <template>
-    <div class="m-post" v-if="show">
-        <ul class="u-list" v-show="status == true">
-            <li class="u-item" v-for="(item, i) in list" :key="'item-' + i">
+    <div class="m-post m-block" v-loading="loading">
+        <ul class="u-list" v-if="data.length">
+            <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
                 <a
                     class="u-title"
-                    v-bind:href="formatURL(item)"
+                    v-bind:href="item | formatURL"
                     target="_blank"
                     >{{ item.post.post_title }}</a
                 >
                 <span class="u-link"
                     ><time class="u-date">{{
-                        formatDate(item.post.post_modified)
+                        item.post.post_modified | formatDate
                     }}</time>
-                    {{ formatURL(item) }}</span
+                    {{ item | formatURL }}</span
                 >
                 <span class="u-desc">{{
-                    formatContent(item.post.post_content)
+                    item.post.post_content | formatContent
                 }}</span>
             </li>
-            <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="total"
-                @current-change="changePage"
-                hide-on-single-page
-            >
-            </el-pagination>
         </ul>
         <el-alert
-            v-show="status == false"
-            title="未检索到相关结果"
+            v-else
+            class="m-archive-null"
+            title="没有找到相关条目"
             type="info"
-        ></el-alert>
+            center
+            show-icon
+        >
+        </el-alert>
+        <el-button
+            class="m-archive-more"
+            type="primary"
+            :class="{ show: hasNextPage }"
+            :loading="loading"
+            @click="appendPage(++page)"
+            >加载更多</el-button
+        >
+        <el-pagination
+            class="m-archive-pages"
+            layout="prev, pager, next"
+            background
+            hide-on-single-page
+            :page-size.sync="per"
+            :total="total"
+            :current-page="page"
+            @current-change="changePage"
+        >
+        </el-pagination>
     </div>
 </template>
 
 <script>
-const dateFormat = require("../utils/dateFormat");
-import {postLink} from '@jx3box/jx3box-common/js/utils'
+import dateFormat from "../utils/dateFormat";
+import { postLink } from "@jx3box/jx3box-common/js/utils";
+import { getPost } from "@/service/search";
 export default {
     name: "Post",
     data: function() {
         return {
+            loading: false,
+            data: [], //数据列表
+            total: 1, //总条目数
+            pages: 1, //总页数
+            page: 1, //当前页数
+            per: 10, //每页条目
         };
     },
     computed: {
-        status: function() {
-            return this.$store.state.q ? !!this.$store.state.post.total : null
+        q: function() {
+            return this.$store.state.q;
         },
-        total : function (){
-            return this.$store.state.post.total
+        hasNextPage: function() {
+            return this.total > 1 && this.page < this.pages;
         },
-        list : function (){
-            return this.$store.state.post.list
-        },
-        show : function (){
-            return this.$store.state.type == 'post'
-        }
     },
-    methods: {
+    filters: {
         formatURL: function(item) {
-            return postLink(item.post.post_type,item.post.ID)
+            return postLink(item.post.post_type, item.post.ID);
         },
         formatContent: function(content) {
             return (
@@ -74,11 +90,39 @@ export default {
         formatDate: function(date) {
             return dateFormat(new Date(date));
         },
+    },
+    methods: {
+        loadData: function(i = 1, append = false) {
+            this.loading = true;
+            getPost(this.q, i)
+                .then((res) => {
+                    if (append) {
+                        this.data = this.data.concat(res.data.data.list);
+                    } else {
+                        window.scrollTo(0, 0);
+                        this.data = res.data.data.list;
+                    }
+                    this.total = res.data.data.total;
+                    this.pages = res.data.data.pages;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         changePage: function(i) {
-            this.$store.commit('search',{page:i})
+            this.loadData(i);
+        },
+        appendPage: function(i) {
+            this.loadData(i, true);
+        },
+    },
+    watch: {
+        q: function() {
+            this.loadData();
         },
     },
     mounted: function() {
+        this.loadData();
     },
 };
 </script>
@@ -86,11 +130,7 @@ export default {
 <style lang="less">
 //搜索结果
 .m-post {
-    background-color: #fff;
-    border-radius: 6px;
-    padding: @space;
-    margin-top: @space;
-
+    
     a {
         color: @color-link;
     }

@@ -1,21 +1,22 @@
 <template>
-    <div class="m-author m-block" v-loading="loading">
+    <div class="m-cj m-block" v-loading="loading">
         <ul class="u-list" v-if="data.length">
-            <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                <a
-                    class="u-author"
-                    v-bind:href="item | formatURL"
-                    target="_blank"
+            <a
+                class="m-cj-item"
+                v-for="(item, i) in data"
+                :href="item.ID | url"
+                :key="i"
+                target="_blank"
+            >
+                <img class="u-icon" :src="item.IconID | icon" />
+                <span class="u-title">{{ item.Name }}</span>
+                <span class="u-desc"
+                    >{{ item.ShortDesc }}</span
                 >
-                    <img
-                        class="u-avatar"
-                        :src="item.user_avatar | formatAvatar"
-                        :alt="item.display_name"
-                    />
-                    <b class="u-name">{{ item.display_name }}</b>
-                    <span class="u-desc">{{ item.user_bio }}</span>
-                </a>
-            </li>
+                <i class="u-point"
+                    ><img src="../assets/img/point.png" />{{ item.Point }}</i
+                >
+            </a>
         </ul>
         <el-alert
             v-else
@@ -49,10 +50,15 @@
 </template>
 
 <script>
-import { authorLink, showAvatar } from "@jx3box/jx3box-common/js/utils";
-import { getAuthor } from "@/service/search";
+import { getCj } from "@/service/search";
+import {
+    __ossMirror,
+    __iconPath,
+    __ossRoot,
+} from "@jx3box/jx3box-common/js/jx3box";
 export default {
-    name: "Author",
+    name: "Cj",
+    props: [],
     data: function() {
         return {
             loading: false,
@@ -60,7 +66,7 @@ export default {
             total: 1, //总条目数
             pages: 1, //总页数
             page: 1, //当前页数
-            per: 10, //每页条目
+            per: 15, //每页条目
         };
     },
     computed: {
@@ -72,26 +78,26 @@ export default {
         },
     },
     filters: {
-        formatURL: function(item) {
-            return authorLink(item.ID);
+        icon: function(id) {
+            return __iconPath + "icon/" + id + ".png";
         },
-        formatAvatar: function(url) {
-            return showAvatar(url, "s");
+        url: function(id) {
+            return "/cj/#/view/" + id;
         },
     },
     methods: {
         loadData: function(i = 1, append = false) {
             this.loading = true;
-            getAuthor(this.q, i)
+            getCj(this.q, i)
                 .then((res) => {
                     if (append) {
-                        this.data = this.data.concat(res.data.data.list);
+                        this.data = this.data.concat(res.data.data.achievements);
                     } else {
                         window.scrollTo(0, 0);
-                        this.data = res.data.data.list;
+                        this.data = res.data.data.achievements;
                     }
                     this.total = res.data.data.total;
-                    this.pages = res.data.data.pages;
+                    this.pages = res.data.data.last_page;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -116,64 +122,50 @@ export default {
 </script>
 
 <style lang="less">
-//搜索结果
-.m-author {
+.m-cj-item {
+    background-color: @bg-light;
+    border: 1px solid #eee;
+    .r(4px);
+    .mb(20px);
+    .db;
+    padding: 10px;
+    .clearfix;
 
-    a {
-        color: @hover;
-    }
-    .u-list {
-        padding: 0;
-        margin: 0;
-    }
-
-    .u-item {
-        margin-bottom: @space;
-        list-style: none;
-    }
-
-    .u-author {
-        display: block;
-        padding: 10px;
-        border: 1px solid #eee;
-        border-radius: 3px;
-        *zoom: 1;
-        img {
-            width: 68px;
-            height: 68px;
-        }
-        &:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-        background-color: #fafbfc;
-        &:hover {
-            border-color: #ddd;
-        }
+    .u-icon {
+        .r(4px);
+        .fl;
+        .mr(10px);
+        .size(48px);
     }
 
-    .u-avatar {
-        float: left;
-        margin-right: @space;
-    }
-
-    .u-name {
-        font-size: 16px;
-        line-height: 1.5;
-        letter-spacing: 0.6px;
-        color: @hover;
-        display: block;
+    .u-title {
+        .fz(14px, 2);
+        .db;
+        color:@primary;
     }
 
     .u-desc {
-        display: block;
-        font-size: 14px;
-        line-height: 1.6;
-        color: @desc;
-        letter-spacing: 0.6px;
-        b {
-            color: @pink;
+        color: #555;
+        .db;
+        .fz(12px);
+    }
+
+    transition: 0.06s border ease-in-out;
+    &:hover {
+        border-color: @primary;
+    }
+
+    .pr;
+    .u-point {
+        .pa;
+        .rt(10px);
+        .fz(13px, 18px);
+        color: #555;
+        font-style: normal;
+        img {
+            .size(18px);
+            .fl;
+            .mr(2px);
         }
     }
 }
