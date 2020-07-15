@@ -52,6 +52,7 @@
 <script>
 import { getCj } from "@/service/search";
 import {
+    __Root,
     __ossMirror,
     __iconPath,
     __ossRoot,
@@ -82,7 +83,7 @@ export default {
             return __iconPath + "icon/" + id + ".png";
         },
         url: function(id) {
-            return "/cj/#/view/" + id;
+            return __Root + "cj/#/view/" + id;
         },
     },
     methods: {
