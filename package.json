@@ -1,5 +1,5 @@
 {
-  "name": "jx3box-search",
+  "name": "search",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
