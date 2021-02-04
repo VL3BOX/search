@@ -9,7 +9,7 @@
             <Author v-if="type == 'author'"/>
             <Cj v-if="type == 'cj'"/>
             <Item v-if="type == 'item'"/>
-            <Wiki v-if="type == 'wiki'"/>
+            <!-- <Wiki v-if="type == 'wiki'"/> -->
             <Google v-if="type == 'google'"/>
         </main>
         <footer v-show="q">
@@ -22,7 +22,7 @@
 import Top from "@/components/Top.vue";
 import Bottom from "@/components/Bottom.vue";
 import Search from "@/components/Search.vue";
-import Wiki from "@/components/Wiki.vue";
+// import Wiki from "@/components/Wiki.vue";
 import Post from "@/components/Post.vue";
 import Author from "@/components/Author.vue";
 import Cj from "@/components/Cj.vue";
@@ -50,7 +50,7 @@ export default {
         Top,
         Bottom,
         Search,
-        Wiki,
+        // Wiki,
         Post,
         Author,
         Cj,
