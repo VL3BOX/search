@@ -5,11 +5,12 @@
             <Search/>
         </header>
         <main v-if="q" >
+            <!-- TODO:增加铭牌精确匹配 -->
+            <!-- <Wiki v-if="type == 'wiki'"/> -->
             <Post v-if="type == 'post'"/>
             <Author v-if="type == 'author'"/>
             <Cj v-if="type == 'cj'"/>
             <Item v-if="type == 'item'"/>
-            <!-- <Wiki v-if="type == 'wiki'"/> -->
             <Google v-if="type == 'google'"/>
         </main>
         <footer v-show="q">

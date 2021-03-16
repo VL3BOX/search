@@ -2,8 +2,7 @@ import axios from "./axios";
 import {
     __server,
     __helperUrl,
-    __bb,
-} from "@jx3box/jx3box-common/js/jx3box.json";
+} from "@jx3box/jx3box-common/data/jx3box.json";
 
 function getPost(title, page) {
     return axios.get(__server + "post/list", {
@@ -47,13 +46,4 @@ function getItem(keyword, page) {
     });
 }
 
-function getWiki(keyword, page) {
-    return axios.get(__bb + "api/wiki/search/", {
-        params: {
-            page,
-            keyword,
-        },
-    });
-}
-
-export { getPost, getAuthor, getCj, getItem, getWiki };
+export { getPost, getAuthor, getCj, getItem };

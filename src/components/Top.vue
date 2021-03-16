@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { __Root } from "@jx3box/jx3box-common/js/jx3box";
+import { __Root } from "@jx3box/jx3box-common/data/jx3box";
 export default {
     name: "Logo",
     data: function() {

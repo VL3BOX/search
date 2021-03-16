@@ -56,7 +56,7 @@ import {
     __ossMirror,
     __iconPath,
     __ossRoot,
-} from "@jx3box/jx3box-common/js/jx3box";
+} from "@jx3box/jx3box-common/data/jx3box";
 export default {
     name: "Cj",
     props: [],
