@@ -13,6 +13,7 @@
                 placeholder="请选择"
                 class="m-search-type"
             >
+            
                 <el-option label="作品" value="post">作品</el-option>
                 <el-option label="作者" value="author">作者</el-option>
                 <el-option label="成就" value="cj">成就</el-option>
