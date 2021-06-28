@@ -34,6 +34,7 @@
             :class="{ show: hasNextPage }"
             :loading="loading"
             @click="appendPage(++page)"
+            icon="el-icon-arrow-down"
             >加载更多</el-button
         >
         <el-pagination
@@ -43,7 +44,7 @@
             hide-on-single-page
             :page-size.sync="per"
             :total="total"
-            :current-page="page"
+            :current-page.sync="page"
             @current-change="changePage"
         >
         </el-pagination>
@@ -118,6 +119,7 @@ export default {
     },
     watch: {
         q: function() {
+            this.page = 1
             this.loadData();
         },
     },
