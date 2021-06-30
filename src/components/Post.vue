@@ -53,7 +53,7 @@
 
 <script>
 import dateFormat from "../utils/dateFormat";
-import { postLink } from "@jx3box/jx3box-common/js/utils";
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { getPost } from "@/service/search";
 export default {
     name: "Post",
@@ -77,7 +77,7 @@ export default {
     },
     filters: {
         formatURL: function(item) {
-            return postLink(item.post.post_type, item.post.ID);
+            return getLink(item.post.post_type, item.post.ID);
         },
         formatContent: function(content) {
             return (
