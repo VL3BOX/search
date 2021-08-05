@@ -31,6 +31,16 @@ module.exports = {
         //for lost
         '/',
 
+    //❤️ Porxy ~
+    devServer: {
+        proxy: {
+            "/api/cms":{
+                target: process.env["DEV_SERVER"] == "true" ? "http://localhost:5120" : "https://cms.jx3box.com"
+            },
+        },
+        disableHostCheck: true
+    },
+
     chainWebpack: config => {
 
         //💘 html-webpack-plugin ~

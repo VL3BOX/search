@@ -4,18 +4,18 @@
             <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
                 <a
                     class="u-title"
-                    v-bind:href="item | formatURL"
+                    v-bind:href="item | getURL"
                     target="_blank"
-                    ><i class="u-client">{{item.client | formartClient}}</i>{{ item.post.post_title }}</a
+                    ><i class="u-client">{{item.client | formartClient}}</i>{{ item.post_title || '无标题' }}</a
                 >
                 <span class="u-link"
                     ><time class="u-date">{{
-                        item.post.post_modified | formatDate
-                    }}</time>
+                        item.post_modified | formatDate
+                    }} @{{item.author}}</time>
                     {{ item | formatURL }}</span
                 >
                 <span class="u-desc">{{
-                    item.post.post_content | formatContent
+                    item.post_content | formatContent
                 }}</span>
             </li>
         </ul>
@@ -77,7 +77,14 @@ export default {
     },
     filters: {
         formatURL: function(item) {
-            return getLink(item.post.post_type, item.post.ID);
+            return getLink(item.post_type, item.ID)
+        },
+        getURL : function (item){
+            let prefix = ''
+            if(item.client == 'origin'){
+                prefix = 'https://origin.jx3box.com'
+            }
+            return prefix + getLink(item.post_type, item.ID);
         },
         formatContent: function(content) {
             return (
