@@ -45,6 +45,7 @@ export default {
     border-radius: 6px;
     padding: @space;
     margin-top: @space;
+    min-height:1200px;
 
     iframe{
         width:100%;

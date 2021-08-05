@@ -6,7 +6,7 @@
                     class="u-title"
                     v-bind:href="item | formatURL"
                     target="_blank"
-                    >{{ item.post.post_title }}</a
+                    ><i class="u-client">{{item.client | formartClient}}</i>{{ item.post.post_title }}</a
                 >
                 <span class="u-link"
                     ><time class="u-date">{{
@@ -91,6 +91,13 @@ export default {
         formatDate: function(date) {
             return dateFormat(new Date(date));
         },
+        formartClient : function (val){
+            if(val){
+                return val == 'origin' ? '怀旧服' : '正式服'
+            }else{
+                return '全部'
+            }
+        }
     },
     methods: {
         loadData: function(i = 1, append = false) {
@@ -197,6 +204,14 @@ export default {
         b {
             color: @pink;
         }
+    }
+    .u-client{
+        background-color: @bg;
+        font-style: normal;
+        .fz(12px);
+        color:#333;
+        padding:2px 6px;
+        .mr(5px);
     }
 }
 </style>
