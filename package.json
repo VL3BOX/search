@@ -10,7 +10,7 @@
     "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common@latest"
   },
   "dependencies": {
-    "@jx3box/jx3box-common": "^6.5.1",
+    "@jx3box/jx3box-common": "^6.6.2",
     "axios": "^0.19.2",
     "core-js": "^3.4.3",
     "csslab": "^4.0.3",
@@ -24,7 +24,9 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@babel/compat-data": "^7.15.0",
     "@babel/plugin-proposal-optional-chaining": "^7.14.5",
+    "@babel/preset-env": "^7.15.6",
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-plugin-router": "^4.0.0",
