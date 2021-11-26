@@ -10,8 +10,8 @@
                 >
                 <span class="u-link"
                     ><time class="u-date">{{
-                        item.post_modified | formatDate
-                    }} @{{item.author}}</time>
+                        (item.post_modified || item.post_date) | formatDate
+                    }} @ {{ item.author || "匿名" }}</time>
                     {{ item | formatURL }}</span
                 >
                 <span class="u-desc">{{
