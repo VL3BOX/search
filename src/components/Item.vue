@@ -4,7 +4,7 @@
             <a
                 class="m-gem-item"
                 v-for="(item, i) in data"
-                :href="item.Link"
+                :href="'/item' + item.Link"
                 :key="i"
                 target="_blank"
             >
