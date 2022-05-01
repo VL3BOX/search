@@ -77,7 +77,7 @@ export default {
             return authorLink(item.ID);
         },
         formatAvatar: function(url) {
-            return showAvatar(url, "s");
+            return showAvatar(url, "m");
         },
     },
     methods: {
