@@ -2,51 +2,19 @@
     <div class="m-post m-block" v-loading="loading">
         <ul class="u-list" v-if="data.length">
             <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                <a
-                    class="u-title"
-                    v-bind:href="item | getURL"
-                    target="_blank"
-                    ><i class="u-client">{{item.client | formartClient}}</i>{{ item.post_title || '无标题' }}</a
+                <a class="u-title" v-bind:href="item | getURL" target="_blank"
+                    ><i class="u-client" :class="showClientCls(item.client)">{{ item.client | formatClient }}</i
+                    ><span class="u-text">{{ item.post_title || "无标题" }}</span></a
                 >
                 <span class="u-link"
-                    ><time class="u-date">{{
-                        (item.post_modified || item.post_date) | formatDate
-                    }} @ {{ item.author || "匿名" }}</time>
-                    {{ item | formatURL }}</span
+                    ><time class="u-date">{{ (item.post_modified || item.post_date) | formatDate }} @ {{ item.author || "匿名" }}</time> {{ item | formatURL }}</span
                 >
-                <span class="u-desc">{{
-                    item.post_content | formatContent
-                }}</span>
+                <span class="u-desc">{{ item.post_content | formatContent }}</span>
             </li>
         </ul>
-        <el-alert
-            v-else
-            class="m-archive-null"
-            title="没有找到相关条目"
-            type="info"
-            center
-            show-icon
-        >
-        </el-alert>
-        <el-button
-            class="m-archive-more"
-            type="primary"
-            :class="{ show: hasNextPage }"
-            :loading="loading"
-            @click="appendPage(++page)"
-            icon="el-icon-arrow-down"
-            >加载更多</el-button
-        >
-        <el-pagination
-            class="m-archive-pages"
-            layout="prev, pager, next"
-            background
-            hide-on-single-page
-            :page-size.sync="per"
-            :total="total"
-            :current-page.sync="page"
-            @current-change="changePage"
-        >
+        <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon> </el-alert>
+        <el-button class="m-archive-more" type="primary" :class="{ show: hasNextPage }" :loading="loading" @click="appendPage(++page)" icon="el-icon-arrow-down">加载更多</el-button>
+        <el-pagination class="m-archive-pages" layout="prev, pager, next" background hide-on-single-page :page-size.sync="per" :total="total" :current-page.sync="page" @current-change="changePage">
         </el-pagination>
     </div>
 </template>
@@ -55,9 +23,11 @@
 import dateFormat from "../utils/dateFormat";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { getPost } from "@/service/search";
+import { __clients } from "@jx3box/jx3box-common/data/jx3box.json";
+import "@jx3box/jx3box-common/css/preset.css";
 export default {
     name: "Post",
-    data: function() {
+    data: function () {
         return {
             loading: false,
             data: [], //数据列表
@@ -68,25 +38,25 @@ export default {
         };
     },
     computed: {
-        q: function() {
+        q: function () {
             return this.$store.state.q;
         },
-        hasNextPage: function() {
+        hasNextPage: function () {
             return this.total > 1 && this.page < this.pages;
         },
     },
     filters: {
-        formatURL: function(item) {
-            return getLink(item.post_type, item.ID)
+        formatURL: function (item) {
+            return getLink(item.post_type, item.ID);
         },
-        getURL : function (item){
-            let prefix = ''
-            if(item.client == 'origin'){
-                prefix = 'https://origin.jx3box.com'
+        getURL: function (item) {
+            let prefix = "";
+            if (item.client == "origin") {
+                prefix = "https://origin.jx3box.com";
             }
             return prefix + getLink(item.post_type, item.ID);
         },
-        formatContent: function(content) {
+        formatContent: function (content) {
             return (
                 content &&
                 content
@@ -95,19 +65,16 @@ export default {
                     .slice(0, 200)
             );
         },
-        formatDate: function(date) {
+        formatDate: function (date) {
             return dateFormat(new Date(date));
         },
-        formartClient : function (val){
-            if(val){
-                return val == 'origin' ? '怀旧服' : '正式服'
-            }else{
-                return '全部'
-            }
-        }
+        formatClient: function (val = 'std') {
+            val = val || 'std'
+            return __clients[val];
+        },
     },
     methods: {
-        loadData: function(i = 1, append = false) {
+        loadData: function (i = 1, append = false) {
             this.loading = true;
             getPost(this.q, i)
                 .then((res) => {
@@ -124,20 +91,24 @@ export default {
                     this.loading = false;
                 });
         },
-        changePage: function(i) {
+        changePage: function (i) {
             this.loadData(i);
         },
-        appendPage: function(i) {
+        appendPage: function (i) {
             this.loadData(i, true);
         },
+        showClientCls:function (client = 'std'){
+            client = client || 'std'
+            return 'i-client-' + client
+        }
     },
     watch: {
-        q: function() {
-            this.page = 1
+        q: function () {
+            this.page = 1;
             this.loadData();
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.loadData();
     },
 };
@@ -146,7 +117,6 @@ export default {
 <style lang="less">
 //搜索结果
 .m-post {
-    
     a {
         color: @color-link;
     }
@@ -177,7 +147,7 @@ export default {
         b {
             color: @pink;
         }
-        &:hover {
+        &:hover .u-text{
             box-shadow: 0 1px 0 @color-link;
         }
     }
@@ -212,13 +182,12 @@ export default {
             color: @pink;
         }
     }
-    .u-client{
-        background-color: @bg;
+    .u-client {
         font-style: normal;
-        .fz(12px);
-        color:#333;
-        padding:2px 6px;
-        .mr(5px);
+        font-size: 12px;
+        padding: 0 5px;
+        border-radius: 3px;
+        margin-right: 5px;
     }
 }
 </style>

@@ -15,10 +15,8 @@
             >
             
                 <el-option label="作品" value="post">作品</el-option>
-                <el-option label="作者" value="author">作者</el-option>
-                <el-option label="成就" value="cj">成就</el-option>
-                <el-option label="物品" value="item">物品</el-option>
-                <!-- <el-option label="百科" value="wiki">百科</el-option> -->
+                <el-option label="百科" value="cj">百科</el-option>
+                <el-option label="用户" value="author">用户</el-option>
                 <el-option label="谷歌" value="google">Google</el-option>
             </el-select>
             <el-button slot="append" icon="el-icon-search"></el-button>
