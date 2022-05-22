@@ -2,14 +2,14 @@
     <div class="m-post m-block" v-loading="loading">
         <ul class="u-list" v-if="data.length">
             <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
-                <a class="u-title" v-bind:href="item | getURL" target="_blank"
+                <a class="u-title" v-bind:href="item | formatURL" target="_blank"
                     ><i class="u-client" :class="showClientCls(item.client)">{{ item.client | formatClient }}</i
                     ><span class="u-text">{{ item.post_title || "无标题" }}</span></a
                 >
                 <span class="u-link"
-                    ><time class="u-date">{{ (item.post_modified || item.post_date) | formatDate }} @ {{ item.author || "匿名" }}</time> {{ item | formatURL }}</span
+                    ><time class="u-date">{{ (item.post_modified || item.post_date) | formatDate }} @ {{ item.author || "匿名" }}</time><span class="u-type">{{ item.post_type | formatType }}</span></span
                 >
-                <span class="u-desc">{{ item.post_content | formatContent }}</span>
+                <!-- <span class="u-desc">{{ item.post_content | formatContent }}</span> -->
             </li>
         </ul>
         <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon> </el-alert>
@@ -20,11 +20,13 @@
 </template>
 
 <script>
-import dateFormat from "../utils/dateFormat";
-import { getLink } from "@jx3box/jx3box-common/js/utils";
-import { getPost } from "@/service/search";
+import dateFormat from "@/utils/dateFormat";
+
+import { getPost } from "../service/search";
+import { getPostLink } from "../utils/common.js";
+import {getTypeLabel} from '@jx3box/jx3box-common/js/utils'
+
 import { __clients } from "@jx3box/jx3box-common/data/jx3box.json";
-import "@jx3box/jx3box-common/css/preset.css";
 export default {
     name: "Post",
     data: function () {
@@ -47,14 +49,8 @@ export default {
     },
     filters: {
         formatURL: function (item) {
-            return getLink(item.post_type, item.ID);
-        },
-        getURL: function (item) {
-            let prefix = "";
-            if (item.client == "origin") {
-                prefix = "https://origin.jx3box.com";
-            }
-            return prefix + getLink(item.post_type, item.ID);
+            item.client = item.client || 'std'
+            return getPostLink(item.post_type, item.ID,item.client);
         },
         formatContent: function (content) {
             return (
@@ -68,10 +64,13 @@ export default {
         formatDate: function (date) {
             return dateFormat(new Date(date));
         },
-        formatClient: function (val = 'std') {
-            val = val || 'std'
+        formatClient: function (val = "std") {
+            val = val || "std";
             return __clients[val];
         },
+        formatType : function (val){
+            return getTypeLabel(val) || '未知'
+        }
     },
     methods: {
         loadData: function (i = 1, append = false) {
@@ -79,10 +78,10 @@ export default {
             getPost(this.q, i)
                 .then((res) => {
                     if (append) {
-                        this.data = this.data.concat(res.data.data.list);
+                        this.data = this.data.concat(res.data.data.list || []);
                     } else {
                         window.scrollTo(0, 0);
-                        this.data = res.data.data.list;
+                        this.data = res.data.data.list || [];
                     }
                     this.total = res.data.data.total;
                     this.pages = res.data.data.pages;
@@ -97,10 +96,10 @@ export default {
         appendPage: function (i) {
             this.loadData(i, true);
         },
-        showClientCls:function (client = 'std'){
-            client = client || 'std'
-            return 'i-client-' + client
-        }
+        showClientCls: function (client = "std") {
+            client = client || "std";
+            return "i-client-" + client;
+        },
     },
     watch: {
         q: function () {
@@ -114,80 +113,3 @@ export default {
 };
 </script>
 
-<style lang="less">
-//搜索结果
-.m-post {
-    a {
-        color: @color-link;
-    }
-    .u-list {
-        padding: 0;
-        margin: 0;
-    }
-
-    .u-item {
-        margin-bottom: @space;
-        list-style: none;
-        *zoom: 1;
-        &:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-    }
-
-    .u-link {
-        display: block;
-    }
-
-    .u-title {
-        font-size: 16px;
-        line-height: 1.5;
-        letter-spacing: 0.6px;
-        b {
-            color: @pink;
-        }
-        &:hover .u-text{
-            box-shadow: 0 1px 0 @color-link;
-        }
-    }
-    .u-link {
-        font-size: 12px;
-        line-height: 2;
-        color: @gray;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .u-date {
-        background-color: @bg;
-        color: @pink;
-        border-radius: 2px;
-        padding: 2px 5px;
-        font-weight: 600;
-    }
-
-    .u-pic {
-        float: left;
-        margin-right: 10px;
-    }
-
-    .u-desc {
-        font-size: 13px;
-        line-height: 1.6;
-        color: @desc;
-        letter-spacing: 0.6px;
-        b {
-            color: @pink;
-        }
-    }
-    .u-client {
-        font-style: normal;
-        font-size: 12px;
-        padding: 0 5px;
-        border-radius: 3px;
-        margin-right: 5px;
-    }
-}
-</style>

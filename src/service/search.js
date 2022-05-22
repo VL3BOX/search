@@ -5,7 +5,7 @@ import { $cms } from "@jx3box/jx3box-common/js/https";
 function getPost(title, page) {
     return $cms().get("/api/cms/posts", {
         params: {
-            search:title,
+            search: title,
             page: page || 1,
         },
     });
@@ -52,4 +52,16 @@ function getItem(keyword, page) {
     });
 }
 
-export { getPost, getAuthor, getCj, getItem, getNamespace };
+function getWiki(keyword, page) {
+    return axios.get(__helperUrl + "api/wiki/search", {
+        headers: {
+            Accept: "application/prs.helper.v2+json",
+        },
+        params: {
+            keyword,
+            page,
+        },
+    });
+}
+
+export { getPost, getAuthor, getCj, getItem, getNamespace, getWiki };
