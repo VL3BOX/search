@@ -7,7 +7,7 @@
                     ><span class="u-text">{{ item.post_title || "无标题" }}</span></a
                 >
                 <span class="u-link"
-                    ><time class="u-date">{{ (item.post_modified || item.post_date) | formatDate }} @ {{ item.author || "匿名" }}</time><span class="u-type">{{ item.post_type | formatType }}</span></span
+                    ><time class="u-date">{{ (item.post_modified || item.post_date) | formatDate }} @ {{ getAuthorName(item) }}</time><span class="u-type">{{ item.post_type | formatType }}</span></span
                 >
                 <!-- <span class="u-desc">{{ item.post_content | formatContent }}</span> -->
             </li>
@@ -100,6 +100,9 @@ export default {
             client = client || "std";
             return "i-client-" + client;
         },
+        getAuthorName : function (item){
+            return item.author_info?.display_name || item.author || "匿名"
+        }
     },
     watch: {
         q: function () {
