@@ -21,10 +21,10 @@ function getAuthor(name, page) {
 }
 
 function getNamespace(key) {
-    return axios.get(__helperUrl + "api/namespace", {
+    return $cms().get("/api/cms/namespace-key", {
         params: {
             key,
-        },
+        }
     });
 }
 

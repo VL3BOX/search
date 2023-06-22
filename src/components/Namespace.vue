@@ -33,7 +33,7 @@ export default {
       this.loading = true
       getNamespace(this.q)
         .then((res) => {
-          this.data = res.data.data.namespace
+          this.data = res.data.data
         })
         .finally(() => {
           this.loading = false
