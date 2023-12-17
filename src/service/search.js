@@ -21,7 +21,7 @@ function getAuthor(name, page) {
 }
 
 function getNamespace(key) {
-    return $cms().get("/api/cms/namespace-key", {
+    return $cms().get("/api/cms/namespace/key", {
         params: {
             key,
         }
