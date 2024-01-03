@@ -1,12 +1,13 @@
 <template>
 	<div class="m-search_all" v-loading="loading">
 		<div class="m-filter" :class="{ show }">
-			<el-divider content-position="left" @click="changeShow">筛选 <i :class="show ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i></el-divider>
+			<el-divider class="m-filter-folder" content-position="left" @click="changeShow">筛选 <i :class="show ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i></el-divider>
 			<div class="m-filter-box" v-for="(item, i) in search" :key="i" v-show="show">
 				<span class="u-label">{{ item.label }}</span>
 				<el-checkbox-group class="u-group" v-model="item.list">
 					<el-checkbox :label="check.label" v-for="(check, key) in filterItem(i)" :key="key">
-						{{ check.label + "(" + check.count + ")" }}
+						{{ check.label}}
+						<span class="u-count">({{ check.count }})</span>
 					</el-checkbox>
 				</el-checkbox-group>
 			</div>
@@ -177,10 +178,9 @@ export default {
 	.mt(20px);
 	box-shadow: 0 0 5px #dcdfe6;
 	background-color: #fff;
-	padding: 0px 20px 30px 20px;
+	padding: 20px;
 
 	.m-filter {
-		padding: 20px 0 10px 0;
 		position: sticky;
 		top: 0px;
 		z-index: 2;
@@ -188,9 +188,16 @@ export default {
 		.el-divider {
 			cursor: pointer;
 		}
+		.u-label{
+			.fz(12px,2);
+			color:#888;
+		}
+		.u-count{
+			color:#999;
+		}
 		&.show {
 			.pb(20px);
-			border-bottom: 1px solid #dcdfe6;
+			border-bottom: 1px dashed #dcdfe6;
 		}
 		&-box {
 			.flex;
@@ -205,6 +212,9 @@ export default {
 			}
 			&:first-child {
 				.mt(0);
+			}
+			.el-checkbox__label{
+				.fz(13px);
 			}
 		}
 	}
@@ -226,5 +236,8 @@ export default {
 			}
 		}
 	}
+}
+.m-filter-folder{
+	margin-top:10px;
 }
 </style>
