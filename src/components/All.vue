@@ -92,8 +92,7 @@ export default {
 					}
 					this.distribution = this.filterGroup(distribution);
 					this.total = page.total;
-					this.pages = page.pageTotal;
-					console.log(this.distribution);
+					this.pages = page.pageTotal; 
 				})
 				.finally(() => {
 					this.loading = false;
