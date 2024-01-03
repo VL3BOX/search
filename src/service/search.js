@@ -66,13 +66,8 @@ function getWiki(keyword, page) {
 
 const domain = "https://gs.jx3box.com/"
 
-function geSearch(q, pageIndex) {
-    return $cms({ domain }).get("api/search", {
-        params: {
-            q,
-            pageIndex,
-        },
-    });
+function geSearch(params) {
+    return $cms({ domain }).get("api/search", { params });
 }
 
 export { getPost, getAuthor, getCj, getItem, getNamespace, getWiki, geSearch };
