@@ -64,4 +64,15 @@ function getWiki(keyword, page) {
     });
 }
 
-export { getPost, getAuthor, getCj, getItem, getNamespace, getWiki };
+const domain = "https://gs.jx3box.com/"
+
+function geSearch(q, pageIndex) {
+    return $cms({ domain }).get("api/search", {
+        params: {
+            q,
+            pageIndex,
+        },
+    });
+}
+
+export { getPost, getAuthor, getCj, getItem, getNamespace, getWiki, geSearch };
