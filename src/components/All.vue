@@ -6,7 +6,7 @@
 				<span class="u-label">{{ item.label }}</span>
 				<el-checkbox-group class="u-group" v-model="item.list">
 					<el-checkbox :label="check.label" v-for="(check, key) in filterItem(i)" :key="key">
-						{{ check.label}}
+						{{ check.label }}
 						<span class="u-count">({{ check.count }})</span>
 					</el-checkbox>
 				</el-checkbox-group>
@@ -23,18 +23,21 @@
 						<span class="u-date">{{ item.updated_at }}</span> @ {{ item.author }}
 					</span>
 				</div>
-				<el-image class="u-img" :src="item.convert_image" fit="fit" v-if="item.convert_image" :preview-src-list="[item.convert_image]"></el-image>
+				<el-image class="u-img" :src="resolveImagePath(item.convert_image)" fit="cover" v-if="item.convert_image" :preview-src-list="[resolveImagePath(item.convert_image)]"></el-image>
 			</li>
 		</ul>
 		<el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon> </el-alert>
 		<el-button class="m-archive-more" type="primary" :class="{ show: hasNextPage }" :loading="loading" @click="appendPage(++page)" icon="el-icon-arrow-down">加载更多</el-button>
 		<el-pagination class="m-archive-pages" layout="prev, pager, next" background hide-on-single-page :page-size.sync="per" :total="total" :current-page.sync="page" @current-change="changePage"> </el-pagination>
+		<el-backtop :bottom="40" :right="20" ></el-backtop>
 	</div>
 </template>
 
 <script>
 import { geSearch } from "@/service/search";
 import { __clients, __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import typeName from "@/assets/data/type.json";
+import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 export default {
 	name: "All",
 	data: function () {
@@ -67,6 +70,7 @@ export default {
 				},
 			},
 			params: {},
+			typeName,
 		};
 	},
 	computed: {
@@ -78,6 +82,7 @@ export default {
 		},
 	},
 	methods: {
+		resolveImagePath,
 		loadData(i = 1, append = false, params) {
 			this.loading = true;
 			const _params = Object.assign({ q: this.q, pageIndex: i }, params);
@@ -93,7 +98,7 @@ export default {
 					}
 					this.distribution = this.filterGroup(distribution);
 					this.total = page.total;
-					this.pages = page.pageTotal; 
+					this.pages = page.pageTotal;
 				})
 				.finally(() => {
 					this.loading = false;
@@ -114,7 +119,7 @@ export default {
 
 				list = Object.keys(data[key]).map((k) => {
 					return {
-						label: k,
+						label: this.typeName[k] ? this.typeName[k] : k,
 						count: data[key][k],
 					};
 				});
@@ -181,19 +186,15 @@ export default {
 	padding: 20px;
 
 	.m-filter {
-		position: sticky;
-		top: 0px;
-		z-index: 2;
-		background: #fff;
 		.el-divider {
 			cursor: pointer;
 		}
-		.u-label{
+		.u-label {
 			.fz(12px,2);
-			color:#888;
+			color: #888;
 		}
-		.u-count{
-			color:#999;
+		.u-count {
+			color: #999;
 		}
 		&.show {
 			.pb(20px);
@@ -213,7 +214,7 @@ export default {
 			&:first-child {
 				.mt(0);
 			}
-			.el-checkbox__label{
+			.el-checkbox__label {
 				.fz(13px);
 			}
 		}
@@ -229,6 +230,7 @@ export default {
 			.u-img {
 				.r(10px);
 				.h(48px);
+				max-width: 120px;
 			}
 			.u-info {
 				.flex;
@@ -237,7 +239,7 @@ export default {
 		}
 	}
 }
-.m-filter-folder{
-	margin-top:10px;
+.m-filter-folder {
+	margin-top: 10px;
 }
 </style>
