@@ -1,9 +1,12 @@
 {
 	"pvxface": "捏脸数据",
 	"pvxbody": "体型数据",
-	"mall": "商城",
 	"pvxjoke": "骚话",
 	"pvxemotion": "趣图",
+	"mall": "商城",
 	"entity": "实物",
-	"virtual": "虚拟"
+	"virtual": "虚拟",
+	"post": "文章",
+	"wiki": "百科",
+	"collection": "小册"
 }
