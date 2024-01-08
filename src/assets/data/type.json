@@ -1,20 +1,12 @@
 {
-	"pvxface": "捏脸数据",
-	"pvxbody": "体型数据",
+	"pvxface": "捏脸",
+	"pvxbody": "体型",
 	"pvxjoke": "骚话",
 	"pvxemotions": "趣图",
-	"mall": "商城",
-	"entity": "实物",
-	"virtual": "虚拟",
+	"question_lib": "题目",
+	"question_paper": "试卷",
 	"post": "文章",
 	"wiki": "百科",
 	"collection": "小册",
-	"common": "文章",
-	"all": "双端",
-	"std": "重制",
-	"origin": "缘起",
-	"wujie": "无界",
-	"question_lib": "题库",
-	"pvxemotions": "趣图",
-	"question_paper": "试卷"
+	"mall": "商城"
 }

@@ -52,22 +52,22 @@ export default {
 			per: 10, //每页条目
 			show: true,
 			search: {
-				filter_author: {
-					label: "作者",
-					list: [],
-				},
-				filter_category: {
-					label: "分类",
+				filter_name: {
+					label: "来源",
 					list: [],
 				},
 				filter_client: {
 					label: "客户端",
 					list: [],
 				},
-				filter_name: {
-					label: "来源",
+				filter_author: {
+					label: "作者",
 					list: [],
 				},
+				// filter_category: {
+					// label: "分类",
+					// list: [],
+				// },
 			},
 			params: {},
 			typeName,
