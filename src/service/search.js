@@ -53,12 +53,9 @@ function getItem(keyword, page) {
 }
 
 function getWiki(keyword, page) {
-    return axios.get(__helperUrl + "api/wiki/search", {
-        headers: {
-            Accept: "application/prs.helper.v2+json",
-        },
+    return $cms().get("/api/cms/wiki/post", {
         params: {
-            keyword,
+            _search: keyword,
             page,
         },
     });
