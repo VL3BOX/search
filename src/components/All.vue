@@ -6,7 +6,7 @@
 				<span class="u-label">{{ item.label }}</span>
 				<el-checkbox-group class="u-group" v-model="item.list">
 					<el-checkbox :label="check.label" v-for="(check, key) in filterItem(i)" :key="key">
-						{{ check.label }}
+						{{ typeName[check.label] || check.label }}
 						<span class="u-count">({{ check.count }})</span>
 					</el-checkbox>
 				</el-checkbox-group>
@@ -29,7 +29,7 @@
 		<el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon> </el-alert>
 		<el-button class="m-archive-more" type="primary" :class="{ show: hasNextPage }" :loading="loading" @click="appendPage(++page)" icon="el-icon-arrow-down">加载更多</el-button>
 		<el-pagination class="m-archive-pages" layout="prev, pager, next" background hide-on-single-page :page-size.sync="per" :total="total" :current-page.sync="page" @current-change="changePage"> </el-pagination>
-		<el-backtop :bottom="40" :right="20" ></el-backtop>
+		<el-backtop :bottom="40" :right="20"></el-backtop>
 	</div>
 </template>
 
@@ -119,7 +119,7 @@ export default {
 
 				list = Object.keys(data[key]).map((k) => {
 					return {
-						label: this.typeName[k] ? this.typeName[k] : k,
+						label: k.trim(),
 						count: data[key][k],
 					};
 				});
