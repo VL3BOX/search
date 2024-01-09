@@ -16,7 +16,7 @@
 			<li class="u-item" v-for="(item, i) in data" :key="i">
 				<div class="u-info">
 					<a class="u-title" :href="resultLink(item)" target="_blank">
-						<i class="u-client" :class="`i-client-${clientKey(item.client)}`">{{ item.client }}</i>
+						<i class="u-client" v-if="item.client" :class="`i-client-${item.client}`">{{ clientKey(item.client) }}</i>
 						<span class="u-text">{{ item.title || "无标题" }}</span>
 					</a>
 					<span class="u-link">
@@ -65,11 +65,11 @@ export default {
 					list: [],
 				},
 				// filter_category: {
-					// label: "分类",
-					// list: [],
+				// label: "分类",
+				// list: [],
 				// },
 			},
-			params: {},
+
 			typeName,
 		};
 	},
@@ -83,7 +83,7 @@ export default {
 	},
 	methods: {
 		resolveImagePath,
-		loadData(i = 1, append = false, params) {
+		loadData(i = 1, append = false, params = this.params) {
 			this.loading = true;
 			const _params = Object.assign({ q: this.q, pageIndex: i }, params);
 			geSearch(_params)
@@ -105,13 +105,7 @@ export default {
 				});
 		},
 		clientKey(val) {
-			let _key = "std";
-			for (const key in __clients) {
-				if (__clients[val] == val) {
-					_key = key;
-				}
-			}
-			return _key;
+			return __clients[val];
 		},
 		filterGroup(data) {
 			return Object.keys(data).map((key) => {
@@ -139,11 +133,10 @@ export default {
 			}
 			return _list;
 		},
-		resultLink(item) {
-			const client = this.clientKey(item.client);
+		resultLink({ client, link }) {
 			const domain = client == "origin" ? __OriginRoot : __Root;
-			const link = item.link.indexOf("/") === 0 ? item.link.slice(1) : item.link;
-			return domain + link;
+			const _link = link.indexOf("/") === 0 ? link.slice(1) : link;
+			return domain + _link;
 		},
 		changeShow() {
 			this.show = !this.show;
@@ -163,7 +156,8 @@ export default {
 				Object.keys(obj).forEach((key) => {
 					if (obj[key].list.length) params[key] = obj[key].list.join(",");
 				});
-				this.loadData(1, false, params);
+				this.params = params;
+				this.loadData(1, false, this.params);
 			},
 		},
 		q: function () {
