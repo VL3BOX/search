@@ -69,7 +69,7 @@ export default {
 				// list: [],
 				// },
 			},
-
+            params: {},
 			typeName,
 		};
 	},
