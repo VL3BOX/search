@@ -69,8 +69,6 @@ export default {
 				// list: [],
 				// },
 			},
-
-			typeName,
 		};
 	},
 	computed: {
@@ -79,6 +77,9 @@ export default {
 		},
 		hasNextPage: function () {
 			return this.total > 1 && this.page < this.pages;
+		},
+		typeName() {
+			return { ...typeName, ...__clients };
 		},
 	},
 	methods: {
