@@ -17,7 +17,7 @@
 				<div class="u-info">
 					<a class="u-title" :href="resultLink(item)" target="_blank">
 						<i class="u-client" v-if="item.client" :class="`i-client-${item.client}`">{{ clientKey(item.client) }}</i>
-						<span class="u-text">{{ item.title || "无标题" }}</span>
+						<span class="u-text">{{ item.title ||item.content || "无标题" }}</span>
 					</a>
 					<span class="u-link">
 						<span class="u-date">{{ item.updated_at }}</span> @ {{ item.author }}
