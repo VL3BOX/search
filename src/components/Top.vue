@@ -4,7 +4,7 @@
             <img class="u-pic" svg-inline src="../assets/img/logo.svg" />
         </a>
         <hr />
-        <p>搜索中心</p>
+        <p>{{ $t('搜索中心') }}</p>
     </header>
 </template>
 
