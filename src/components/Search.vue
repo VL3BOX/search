@@ -1,12 +1,12 @@
 <template>
 	<div class="m-search">
-		<el-input placeholder="请输入内容" v-model="q" class="input-with-select" @change="search" clearable>
-			<el-select v-model="type" slot="prepend" placeholder="请选择" class="m-search-type">
-				<el-option label="全部" value="all">全部</el-option>
-				<el-option label="作品" value="post">作品</el-option>
-				<el-option label="百科" value="wiki">百科</el-option>
-				<el-option label="用户" value="author">用户</el-option>
-				<el-option label="谷歌" value="google">Google</el-option>
+		<el-input :placeholder="$t('请输入内容')" v-model="q" class="input-with-select" @change="search" clearable>
+			<el-select v-model="type" slot="prepend" :placeholder="$t('请选择')" class="m-search-type">
+				<el-option :label="$t('全部')" value="all">全部</el-option>
+				<el-option :label="$t('作品')" value="post">作品</el-option>
+				<el-option :label="$t('百科')" value="wiki">百科</el-option>
+				<el-option :label="$t('用户')" value="author">用户</el-option>
+				<el-option :label="$t('谷歌')" value="google">Google</el-option>
 			</el-select>
 			<el-button slot="append" icon="el-icon-search"></el-button>
 		</el-input>
