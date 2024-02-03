@@ -4,7 +4,7 @@
             <li class="u-item" v-for="(item, i) in data" :key="'item-' + i">
                 <a class="u-title" v-bind:href="item | formatURL" target="_blank"
                     ><i class="u-client" :class="showClientCls(item.client)">{{ item.client | formatClient }}</i
-                    ><span class="u-text">{{ item.post_title || "无标题" }}</span></a
+                    ><span class="u-text">{{ item.post_title || $t('无标题') }}</span></a
                 >
                 <span class="u-link"
                     ><time class="u-date">{{ (item.post_modified || item.post_date) | formatDate }} @ {{ getAuthorName(item) }}</time><span class="u-type">{{ item.post_type | formatType }}</span></span

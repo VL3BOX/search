@@ -1,7 +1,7 @@
 <template>
 	<div class="m-search_all" v-loading="loading">
 		<div class="m-filter" :class="{ show }">
-			<el-divider class="m-filter-folder" content-position="left" @click="changeShow">筛选 <i :class="show ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i></el-divider>
+			<el-divider class="m-filter-folder" content-position="left" @click="changeShow">{{ $t('筛选') }} <i :class="show ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i></el-divider>
 			<div class="m-filter-box" v-for="(item, i) in search" :key="i" v-show="show">
 				<span class="u-label">{{ item.label }}</span>
 				<el-checkbox-group class="u-group" v-model="item.list">
@@ -17,7 +17,7 @@
 				<div class="u-info">
 					<a class="u-title" :href="resultLink(item)" target="_blank">
 						<i class="u-client" v-if="item.client" :class="`i-client-${item.client}`">{{ clientKey(item.client) }}</i>
-						<span class="u-text">{{ item.title ||item.content || "无标题" }}</span>
+						<span class="u-text">{{ item.title ||item.content || $t('无标题') }}</span>
 					</a>
 					<span class="u-link">
 						<span class="u-date">{{ item.updated_at }}</span> @ {{ item.author }}

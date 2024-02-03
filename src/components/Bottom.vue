@@ -1,8 +1,8 @@
 <template>
 	<footer class="m-footer">
 		&copy;
-		<a :href="homepage" target="_blank">JX3BOX.COM</a>
-		<a class="u-feedback" :href="feedback" target="_blank">❤ 反馈建议</a>
+		<a :href="homepage" target="_blank">VL3BOX.COM</a>
+		<a class="u-feedback" :href="feedback" target="_blank">❤ {{ $t('反馈建议') }}</a>
 	</footer>
 </template>
 
