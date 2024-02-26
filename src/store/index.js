@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 let store = {
     state: {
-        type : 'post',
+        type : 'all',
         q : '',
     },
     mutations: {

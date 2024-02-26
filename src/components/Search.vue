@@ -38,7 +38,7 @@ export default {
 		init() {
 			let params = new URLSearchParams(location.search);
 			this.q = params.get("q") || "";
-			this.type = params.get("type") || "post";
+			this.type = params.get("type") || "all";
 			this.search();
 		},
 	},
