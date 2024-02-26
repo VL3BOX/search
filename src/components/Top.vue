@@ -58,7 +58,12 @@ export default {
         display: inline-block;
         padding-left: @space;
         color: #777;
+        
     }
+    p:lang(vi) {
+            font-size: 24px;
+            letter-spacing: 6px;
+        }
 }
 @media screen and (max-width: @ipad-y) {
     .m-logo {

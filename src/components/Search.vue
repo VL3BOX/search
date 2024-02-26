@@ -53,6 +53,9 @@ export default {
 .el-input-group__prepend .el-select {
 	width: 80px;
 }
+.el-input-group__prepend .el-select:lang(vi) {
+	width: 128px;
+}
 .el-select-dropdown__item img {
 	width: @space;
 	vertical-align: middle;
