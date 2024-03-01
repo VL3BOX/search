@@ -50,7 +50,7 @@ export default {
 			pages: 1, //总页数
 			page: 1, //当前页数
 			per: 10, //每页条目
-			show: false,
+			show: true,
 			search: {
 				filter_name: {
 					label: "来源",
